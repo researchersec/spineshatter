@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lonewolf Auction Price History</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <!-- WoWhead Tooltip Library -->
+    <script src="https://wow.zamimg.com/widgets/power.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --wow-gold: #ffd700;
+            --wow-orange: #ff8000;
+            --wow-purple: #a335ee;
+            --wow-blue: #0070dd;
+            --wow-green: #1eff00;
+            --wow-white: #ffffff;
+            --wow-gray: #9d9d9d;
+            --bg-dark: #0a0e27;
+            --bg-darker: #050609;
+            --bg-light: #1a1f3a;
+            --text-light: #d3d3d3;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-darker);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(180deg, #1a1f3a 0%, #0f1424 100%);
+            border-bottom: 2px solid var(--wow-gold);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--wow-gold);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .search-header {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 30px;
+        }
+
+        .search-header input {
+            width: 100%;
+            padding: 10px 15px;
+            background: var(--bg-darker);
+            border: 2px solid var(--wow-gold);
+            color: var(--text-light);
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .search-header input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 30px;
+            font-size: 0.9em;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            color: var(--wow-gold);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: var(--wow-gray);
+            font-size: 0.85em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: var(--bg-light);
+            border: 1px solid var(--wow-gold);
+            border-radius: 4px;
+            padding: 15px;
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        .sidebar-title {
+            color: var(--wow-gold);
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 1px solid var(--wow-gold);
+            padding-bottom: 10px;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .filter-label input,
+        .filter-label select {
+            margin-right: 5px;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 8px;
+            background: var(--bg-darker);
+            border: 1px solid var(--wow-gold);
+            color: var(--text-light);
+            border-radius: 4px;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+        }
+
+        .sort-btn {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            background: var(--wow-gold);
+            color: var(--bg-darker);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+
+        .sort-btn:hover {
+            background: var(--wow-orange);
+            transform: translateX(2px);
+        }
+
+        .sort-btn.active {
+            background: var(--wow-orange);
+            box-shadow: 0 0 10px rgba(255, 128, 0, 0.5);
+        }
+
+        .main-content {
+            background: var(--bg-light);
+            border: 1px solid var(--wow-gold);
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .item-card {
+            background: var(--bg-darker);
+            border: 2px solid var(--wow-gold);
+            border-radius: 4px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--wow-gold), transparent);
+        }
+
+        .item-card:hover {
+            border-color: var(--wow-orange);
+            background: var(--bg-light);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--wow-gold);
+            flex: 1;
+            word-break: break-word;
+            cursor: help;
+        }
+
+        .item-id {
+            color: var(--wow-gray);
+            font-size: 0.85em;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .item-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            font-size: 0.9em;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-row-label {
+            color: var(--wow-gray);
+        }
+
+        .stat-row-value {
+            color: var(--wow-gold);
+            font-weight: bold;
+        }
+
+        .price-trend {
+            margin-top: 8px;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        .trend-up {
+            background: rgba(30, 255, 0, 0.2);
+            color: #1eff00;
+        }
+
+        .trend-down {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-light);
+            margin: 20px auto;
+            padding: 30px;
+            border: 2px solid var(--wow-gold);
+            border-radius: 4px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: var(--wow-gold);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--wow-orange);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--wow-gold);
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            flex: 1;
+        }
+
+        .modal-title h2 {
+            color: var(--wow-gold);
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .modal-title p {
+            color: var(--wow-gray);
+            font-size: 0.9em;
+        }
+
+        .chart-container {
+            background: var(--bg-darker);
+            border: 1px solid var(--wow-gold);
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            position: relative;
+            height: 400px;
+        }
+
+        .chart-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .chart-tab {
+            padding: 8px 15px;
+            background: var(--bg-darker);
+            border: 1px solid var(--wow-gold);
+            color: var(--text-light);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .chart-tab.active {
+            background: var(--wow-gold);
+            color: var(--bg-darker);
+            font-weight: bold;
+        }
+
+        .chart-tab:hover:not(.active) {
+            border-color: var(--wow-orange);
+            color: var(--wow-gold);
+        }
+
+        .price-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: var(--bg-darker);
+            border: 1px solid var(--wow-gold);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .price-table thead {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), transparent);
+            border-bottom: 2px solid var(--wow-gold);
+        }
+
+        .price-table th {
+            padding: 12px;
+            text-align: left;
+            color: var(--wow-gold);
+            font-weight: bold;
+        }
+
+        .price-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .price-table tbody tr:hover {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--wow-gold);
+            font-size: 1.2em;
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff6b6b;
+            color: #ff9999;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .no-results {
+            background: var(--bg-darker);
+            border: 1px solid var(--wow-gold);
+            padding: 40px;
+            text-align: center;
+            color: var(--wow-gray);
+            border-radius: 4px;
+        }
+
+        .last-updated {
+            color: var(--wow-gray);
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        .quality-legendary { color: #ff8000; }
+        .quality-epic { color: #a335ee; }
+        .quality-rare { color: #0070dd; }
+        .quality-uncommon { color: #1eff00; }
+        .quality-common { color: #ffffff; }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+            }
+
+            .stats-bar {
+                gap: 15px;
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-header {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .stats-bar {
+                width: 100%;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10px auto;
+                padding: 15px;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+
+            .price-table {
+                font-size: 0.85em;
+            }
+
+            .price-table th,
+            .price-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">⚔️ Lonewolf Auctions</div>
+            <div class="search-header">
+                <input type="text" id="headerSearch" placeholder="Search items..." onkeypress="if(event.key==='Enter') searchItems()">
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value" id="headerItems">-</div>
+                    <div class="stat-label">Items</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="headerUpdates">-</div>
+                    <div class="stat-label">Updates</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="headerAvg">-</div>
+                    <div class="stat-label">Avg Price</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-title">Filters</div>
+            
+            <div class="filter-group">
+                <label class="filter-label">
+                    <input type="checkbox" id="filterRecent" onchange="applyFilters()"> Recently Updated
+                </label>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">
+                    <input type="checkbox" id="filterHigh" onchange="applyFilters()"> High Activity
+                </label>
+            </div>
+
+            <div class="sidebar-title" style="margin-top: 20px;">Sort By</div>
+            
+            <button class="sort-btn active" onclick="sortItems('name')">Name</button>
+            <button class="sort-btn" onclick="sortItems('price')">Price</button>
+            <button class="sort-btn" onclick="sortItems('recent')">Recent</button>
+            <button class="sort-btn" onclick="sortItems('activity')">Activity</button>
+
+            <div class="last-updated" id="sidebarUpdated" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="items-grid" id="itemsGrid">
+                <div class="loading">Loading auction data...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="itemModal" class="modal" onclick="if(event.target === this) closeModal()">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2 id="modalName"></h2>
+                    <p id="modalId"></p>
+                    <p id="modalStats" class="last-updated"></p>
+                </div>
+            </div>
+
+            <div class="chart-tabs">
+                <button class="chart-tab active" onclick="switchChart('price')">Price History</button>
+                <button class="chart-tab" onclick="switchChart('volume')">Volume</button>
+                <button class="chart-tab" onclick="switchChart('auctions')">Auctions</button>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="priceChart"></canvas>
+            </div>
+
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Min Buyout</th>
+                        <th>Market Value</th>
+                        <th>Qty</th>
+                        <th>Auctions</th>
+                    </tr>
+                </thead>
+                <tbody id="priceTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let allItems = [];
+        let filteredItems = [];
+        let currentSort = 'name';
+        let currentChart = 'price';
+        let chart = null;
+        const ITEMS_PER_PAGE = 50;
+        let indexData = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadIndex();
+        });
+
+        async function loadIndex() {
+            try {
+                const response = await fetch('prices/history/index.json');
+                if (!response.ok) throw new Error('Failed to load index');
+                indexData = await response.json();
+
+                let totalDataPoints = 0;
+                let totalPrice = 0;
+                let priceCount = 0;
+
+                allItems = (indexData.items || []).map(item => ({
+                    ...item,
+                    dataPoints: 0,
+                    latestPrice: 0,
+                    avgPrice: 0
+                }));
+
+                // Load all item data
+                for (const item of allItems) {
+                    try {
+                        const itemResponse = await fetch(`prices/history/${item.itemId}.json`);
+                        if (itemResponse.ok) {
+                            const itemData = await itemResponse.json();
+                            item.dataPoints = itemData.dataPoints || 0;
+                            item.priceHistory = itemData.priceHistory || [];
+                            
+                            if (item.priceHistory.length > 0) {
+                                item.latestPrice = item.priceHistory[item.priceHistory.length - 1].minBuyout || 0;
+                                item.dateRange = itemData.dateRange || {};
+                                
+                                const prices = item.priceHistory.map(p => p.minBuyout || 0).filter(p => p > 0);
+                                item.avgPrice = prices.length > 0 ? Math.round(prices.reduce((a, b) => a + b) / prices.length) : 0;
+                                item.minPrice = Math.min(...prices);
+                                item.maxPrice = Math.max(...prices);
+                                
+                                totalDataPoints += item.dataPoints;
+                                totalPrice += item.avgPrice;
+                                priceCount++;
+                            }
+                        }
+                    } catch (e) {
+                        console.error(`Failed to load item ${item.itemId}:`, e);
+                    }
+                }
+
+                // Update header stats
+                const avgPrice = priceCount > 0 ? Math.round(totalPrice / priceCount) : 0;
+                document.getElementById('headerItems').textContent = allItems.length.toLocaleString();
+                document.getElementById('headerUpdates').textContent = totalDataPoints.toLocaleString();
+                document.getElementById('headerAvg').textContent = formatPrice(avgPrice);
+
+                // Update last updated time
+                if (allItems.length > 0 && allItems[0].dateRange?.end) {
+                    const lastDate = new Date(allItems[0].dateRange.end);
+                    const updated = `Last updated: ${lastDate.toLocaleString()}`;
+                    document.getElementById('sidebarUpdated').textContent = updated;
+                }
+
+                filteredItems = [...allItems];
+                sortItems(currentSort);
+                displayItems();
+            } catch (error) {
+                console.error('Error loading index:', error);
+                document.getElementById('itemsGrid').innerHTML = 
+                    `<div class="error">Error loading auction data: ${error.message}</div>`;
+            }
+        }
+
+        function displayItems() {
+            const grid = document.getElementById('itemsGrid');
+
+            if (filteredItems.length === 0) {
+                grid.innerHTML = '<div class="no-results">No items found matching your filters.</div>';
+                return;
+            }
+
+            grid.innerHTML = filteredItems.slice(0, ITEMS_PER_PAGE).map(item => {
+                const priceTrend = item.latestPrice > item.avgPrice ? 'up' : 'down';
+                const trendPercent = item.avgPrice > 0 ? 
+                    Math.round((Math.abs(item.latestPrice - item.avgPrice) / item.avgPrice) * 100) : 0;
+
+                return `
+                    <div class="item-card" onclick="viewItem('${item.itemId}')">
+                        <div class="item-header">
+                            <span class="item-name">${escapeHtml(item.itemName)}</span>
+                            <span class="item-id">ID: ${item.itemId}</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-row">
+                                <span class="stat-row-label">Current:</span>
+                                <span class="stat-row-value">${formatPrice(item.latestPrice)}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-row-label">Average:</span>
+                                <span class="stat-row-value">${formatPrice(item.avgPrice)}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-row-label">Min:</span>
+                                <span class="stat-row-value">${formatPrice(item.minPrice)}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-row-label">Max:</span>
+                                <span class="stat-row-value">${formatPrice(item.maxPrice)}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-row-label">Updates:</span>
+                                <span class="stat-row-value">${item.dataPoints}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-row-label">Data Points:</span>
+                                <span class="stat-row-value">${item.priceHistory.length}</span>
+                            </div>
+                        </div>
+                        <div class="price-trend ${trend-${priceTrend}}">
+                            ${priceTrend === 'up' ? '📈' : '📉'} 
+                            ${priceTrend === 'up' ? 'Up' : 'Down'} ${trendPercent}% vs Average
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function searchItems() {
+            const query = document.getElementById('headerSearch').value.toLowerCase();
+            filteredItems = allItems.filter(item =>
+                item.itemName.toLowerCase().includes(query) ||
+                item.itemId.toLowerCase().includes(query)
+            );
+            sortItems(currentSort);
+            displayItems();
+        }
+
+        function applyFilters() {
+            const filterRecent = document.getElementById('filterRecent').checked;
+            const filterHigh = document.getElementById('filterHigh').checked;
+
+            filteredItems = allItems.filter(item => {
+                if (filterRecent && item.dataPoints < 10) return false;
+                if (filterHigh && item.dataPoints < 20) return false;
+                return true;
+            });
+
+            sortItems(currentSort);
+            displayItems();
+        }
+
+        function sortItems(sortType) {
+            currentSort = sortType;
+
+            // Update button styles
+            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+            event.target?.classList.add('active');
+
+            if (sortType === 'name') {
+                filteredItems.sort((a, b) => a.itemName.localeCompare(b.itemName));
+            } else if (sortType === 'price') {
+                filteredItems.sort((a, b) => (b.latestPrice || 0) - (a.latestPrice || 0));
+            } else if (sortType === 'recent') {
+                filteredItems.sort((a, b) => new Date(b.dateRange?.end || 0) - new Date(a.dateRange?.end || 0));
+            } else if (sortType === 'activity') {
+                filteredItems.sort((a, b) => (b.dataPoints || 0) - (a.dataPoints || 0));
+            }
+
+            displayItems();
+        }
+
+        function viewItem(itemId) {
+            const item = allItems.find(i => i.itemId === itemId);
+            if (!item) return;
+
+            // Update modal header
+            document.getElementById('modalName').textContent = item.itemName;
+            document.getElementById('modalId').textContent = `Item ID: ${item.itemId}`;
+            document.getElementById('modalStats').textContent = 
+                `Data Points: ${item.priceHistory.length} | Range: ${formatDate(item.dateRange?.start)} to ${formatDate(item.dateRange?.end)}`;
+
+            // Draw chart
+            switchChart('price');
+
+            // Display table
+            displayTable(item.priceHistory);
+
+            document.getElementById('itemModal').classList.add('active');
+        }
+
+        function switchChart(type) {
+            currentChart = type;
+
+            // Update tab styles
+            document.querySelectorAll('.chart-tab').forEach(btn => btn.classList.remove('active'));
+            event.target?.classList.add('active');
+
+            const item = allItems.find(i => i.itemId === document.getElementById('modalId').textContent.split(': ')[1]);
+            if (item) {
+                drawChart(item.priceHistory, type);
+            }
+        }
+
+        function drawChart(priceHistory, type = 'price') {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const dates = priceHistory.map(p => formatDate(p.date));
+            let data, label, color;
+
+            if (type === 'price') {
+                data = priceHistory.map(p => p.minBuyout || 0);
+                label = 'Min Buyout Price';
+                color = '#ffd700';
+            } else if (type === 'volume') {
+                data = priceHistory.map(p => p.quantity || 0);
+                label = 'Quantity';
+                color = '#ff8000';
+            } else if (type === 'auctions') {
+                data = priceHistory.map(p => p.numAuctions || 0);
+                label = 'Auction Count';
+                color = '#0070dd';
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        borderColor: color,
+                        backgroundColor: color + '20',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 2,
+                        pointBackgroundColor: color,
+                        pointBorderColor: 'rgba(10, 14, 39, 1)',
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#d3d3d3',
+                                font: { size: 12 }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#d3d3d3',
+                                callback: type === 'price' ? function(value) {
+                                    return formatPrice(value);
+                                } : undefined
+                            },
+                            grid: {
+                                color: 'rgba(255, 215, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#d3d3d3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 215, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayTable(priceHistory) {
+            const tbody = document.getElementById('priceTableBody');
+
+            tbody.innerHTML = priceHistory.slice().reverse().map((p, idx) => `
+                <tr>
+                    <td>${formatDateTime(p.date)}</td>
+                    <td>${formatPrice(p.minBuyout)}</td>
+                    <td>${formatPrice(p.marketValue)}</td>
+                    <td>${p.quantity?.toLocaleString() || '-'}</td>
+                    <td>${p.numAuctions || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function closeModal() {
+            document.getElementById('itemModal').classList.remove('active');
+            if (chart) {
+                chart.destroy();
+                chart = null;
+            }
+        }
+
+        // Utility functions
+        function formatPrice(price) {
+            if (price === null || price === undefined || price === 0) return '-';
+            return price.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            return new Date(dateString).toLocaleDateString();
+        }
+
+        function formatDateTime(dateString) {
+            if (!dateString) return '-';
+            return new Date(dateString).toLocaleString();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
