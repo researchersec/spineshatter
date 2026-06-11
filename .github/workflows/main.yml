@@ -1,0 +1,47 @@
+name: Export Price History
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  export-prices:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install GitPython
+          
+      - name: Clone lonewolf repo
+        run: |
+          git clone https://github.com/researchersec/lonewolf.git lonewolf_source
+          
+      - name: Run export script on cloned repo
+        run: |
+          cd lonewolf_source
+          python ../export_price_history.py
+          
+      - name: Copy prices/history to repo
+        run: |
+          mkdir -p prices
+          cp -r lonewolf_source/prices/history/* prices/ || true
+          
+      - name: Commit and push changes
+        run: |
+          git config user.name "Price History Bot"
+          git config user.email "bot@example.com"
+          git add prices/
+          git commit -m "Update price history - $(date -u +'%Y-%m-%d %H:%M:%S UTC')" || true
+          git push
