@@ -117,11 +117,54 @@
             height: auto !important;
         }
 
+        .chart-controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .chart-time-range {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .time-range-label {
+            font-size: 0.95em;
+            color: #666;
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        .time-range-btn {
+            padding: 6px 12px;
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.9em;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .time-range-btn:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .time-range-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
         .chart-tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
         }
 
         .chart-tab {
@@ -132,17 +175,43 @@
             cursor: pointer;
             font-size: 1em;
             transition: all 0.3s;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px;
         }
 
         .chart-tab.active {
             color: #667eea;
-            border-bottom-color: #667eea;
+            border-bottom: 2px solid #667eea;
+            margin-bottom: -2px;
+            padding-bottom: 8px;
         }
 
         .chart-tab:hover {
             color: #667eea;
+        }
+
+        .chart-options {
+            display: flex;
+            gap: 15px;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+
+        .chart-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        .chart-option input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .chart-option label {
+            cursor: pointer;
+            user-select: none;
         }
 
         .price-table {
@@ -218,6 +287,16 @@
                 height: 300px;
             }
 
+            .chart-controls {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+
+            .chart-options {
+                margin-left: 0 !important;
+                width: 100%;
+            }
+
             th, td {
                 padding: 10px 15px;
                 font-size: 0.9em;
@@ -243,10 +322,30 @@
 
         <!-- Chart -->
         <div class="chart-container">
-            <div class="chart-tabs">
-                <button class="chart-tab active" onclick="switchChart('price')">Price</button>
-                <button class="chart-tab" onclick="switchChart('volume')">Volume</button>
-                <button class="chart-tab" onclick="switchChart('auctions')">Auctions</button>
+            <div class="chart-controls">
+                <div class="chart-time-range">
+                    <span class="time-range-label">Time Range:</span>
+                    <button class="time-range-btn" onclick="setTimeRange('all')">All</button>
+                    <button class="time-range-btn" onclick="setTimeRange('day')">1D</button>
+                    <button class="time-range-btn active" onclick="setTimeRange('week')">1W</button>
+                    <button class="time-range-btn" onclick="setTimeRange('month')">1M</button>
+                    <button class="time-range-btn" onclick="setTimeRange('year')">1Y</button>
+                </div>
+                <div class="chart-tabs">
+                    <button class="chart-tab active" onclick="switchChart('price')">Price</button>
+                    <button class="chart-tab" onclick="switchChart('volume')">Volume</button>
+                    <button class="chart-tab" onclick="switchChart('auctions')">Auctions</button>
+                </div>
+                <div class="chart-options">
+                    <div class="chart-option">
+                        <input type="checkbox" id="excludeOutliers" checked onchange="displayChart(getCurrentChartType())">
+                        <label for="excludeOutliers">Exclude Outliers (99th %ile)</label>
+                    </div>
+                    <div class="chart-option">
+                        <input type="checkbox" id="logScale" onchange="displayChart(getCurrentChartType())">
+                        <label for="logScale">Log Scale</label>
+                    </div>
+                </div>
             </div>
             <div style="position: relative; height: 500px; width: 100%;">
                 <canvas id="priceChart"></canvas>
@@ -277,6 +376,9 @@
         let itemData = null;
         let itemName = null;
         let chart = null;
+        let currentChartType = 'price';
+        let currentTimeRange = 'week';
+        let filteredPriceHistory = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             loadItem();
@@ -305,6 +407,7 @@
                 if (!response.ok) throw new Error('Failed to load item data');
                 itemData = await response.json();
 
+                filterDataByTimeRange();
                 displayItemHeader();
                 displayChart('price');
                 displayTable();
@@ -320,7 +423,7 @@
         function displayItemHeader() {
             if (!itemData) return;
 
-            const priceHistory = itemData.priceHistory || [];
+            const priceHistory = getDisplayData();
             const prices = priceHistory.map(p => p.minBuyout || 0).filter(p => p > 0);
 
             const latest = priceHistory.length > 0 ? priceHistory[priceHistory.length - 1].minBuyout || 0 : 0;
@@ -355,48 +458,165 @@
                         </div>
                         <div class="stat-box">
                             <div class="stat-label">Date Range</div>
-                            <div class="stat-value" style="font-size: 0.9em;">${formatDate(itemData.dateRange?.start)} to ${formatDate(itemData.dateRange?.end)}</div>
+                            <div class="stat-value" style="font-size: 0.9em;">${formatDate(priceHistory[0]?.date)} to ${formatDate(priceHistory[priceHistory.length - 1]?.date)}</div>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        function displayChart(type = 'price') {
-            if (!itemData || !itemData.priceHistory) return;
+        function getCurrentChartType() {
+            return currentChartType;
+        }
 
+        function setTimeRange(range) {
+            currentTimeRange = range;
+            
+            // Update button states
+            document.querySelectorAll('.time-range-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter data and redraw
+            filterDataByTimeRange();
+            displayItemHeader();
+            displayChart(currentChartType);
+            displayTable();
+        }
+
+        function filterDataByTimeRange() {
+            if (!itemData || !itemData.priceHistory) {
+                filteredPriceHistory = [];
+                return;
+            }
+
+            const now = new Date();
+            let cutoffDate = new Date();
+
+            switch (currentTimeRange) {
+                case 'day':
+                    cutoffDate.setDate(cutoffDate.getDate() - 1);
+                    break;
+                case 'week':
+                    cutoffDate.setDate(cutoffDate.getDate() - 7);
+                    break;
+                case 'month':
+                    cutoffDate.setMonth(cutoffDate.getMonth() - 1);
+                    break;
+                case 'year':
+                    cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
+                    break;
+                case 'all':
+                default:
+                    cutoffDate = new Date(0); // Beginning of time
+            }
+
+            filteredPriceHistory = itemData.priceHistory.filter(p => {
+                const pDate = new Date(p.date);
+                return pDate >= cutoffDate;
+            });
+        }
+
+        function getDisplayData() {
+            return filteredPriceHistory && filteredPriceHistory.length > 0 ? filteredPriceHistory : itemData.priceHistory;
+        }
+
+        function getPercentile(arr, percentile) {
+            const sorted = [...arr].filter(x => x > 0).sort((a, b) => a - b);
+            if (sorted.length === 0) return 0;
+            const index = Math.ceil(sorted.length * (percentile / 100)) - 1;
+            return sorted[Math.max(0, index)];
+        }
+
+        function displayChart(type = 'price') {
+            if (!itemData) return;
+
+            currentChartType = type;
             const canvas = document.getElementById('priceChart');
             const ctx = canvas.getContext('2d');
 
             if (chart) chart.destroy();
 
-            const priceHistory = itemData.priceHistory;
+            let priceHistory = getDisplayData();
+            if (!priceHistory || priceHistory.length === 0) return;
+            const excludeOutliers = document.getElementById('excludeOutliers')?.checked || false;
+            const useLogScale = document.getElementById('logScale')?.checked || false;
+            
             console.log('Price history length:', priceHistory.length);
             
-            const dates = priceHistory.map(p => formatDate(p.date));
-            
-            let data, label, color;
+            let data, label, color, dataPoints;
 
             if (type === 'price') {
-                data = priceHistory.map(p => p.minBuyout || 0);
+                dataPoints = priceHistory.map((p, i) => ({ value: p.minBuyout || 0, index: i }));
                 label = 'Min Buyout Price';
                 color = '#667eea';
             } else if (type === 'volume') {
-                data = priceHistory.map(p => p.quantity || 0);
+                dataPoints = priceHistory.map((p, i) => ({ value: p.quantity || 0, index: i }));
                 label = 'Quantity';
                 color = '#764ba2';
             } else if (type === 'auctions') {
-                data = priceHistory.map(p => p.numAuctions || 0);
+                dataPoints = priceHistory.map((p, i) => ({ value: p.numAuctions || 0, index: i }));
                 label = 'Auction Count';
                 color = '#f59e0b';
             }
 
+            // Filter outliers if enabled
+            if (excludeOutliers) {
+                const percentile99 = getPercentile(dataPoints.map(d => d.value), 99);
+                dataPoints = dataPoints.map(d => ({
+                    ...d,
+                    value: d.value > percentile99 ? null : d.value,
+                    isOutlier: d.value > percentile99
+                }));
+            }
+
+            data = dataPoints.map(d => d.value);
+            const dates = dataPoints.map((dp, idx) => formatDate(priceHistory[dp.index].date));
+
             console.log('Chart data length:', data.length);
             console.log('Chart dates length:', dates.length);
-            
+
+
             // Don't show individual points if there are too many
             const pointRadius = data.length > 100 ? 0 : 3;
             const pointHoverRadius = data.length > 100 ? 4 : 5;
+
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#333',
+                            font: { size: 12 }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: useLogScale ? 'logarithmic' : 'linear',
+                        ticks: {
+                            color: '#999',
+                            callback: type === 'price' ? function(value) {
+                                return formatPrice(value);
+                            } : undefined
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#999',
+                            maxTicksLimit: 10
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    }
+                }
+            };
 
             chart = new Chart(ctx, {
                 type: 'line',
@@ -415,43 +635,11 @@
                         pointBorderColor: 'white',
                         pointBorderWidth: 2,
                         pointHoverRadius: pointHoverRadius,
-                        pointHoverBorderWidth: 2
+                        pointHoverBorderWidth: 2,
+                        spanGaps: true
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#333',
-                                font: { size: 12 }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                color: '#999',
-                                callback: type === 'price' ? function(value) {
-                                    return formatPrice(value);
-                                } : undefined
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: '#999',
-                                maxTicksLimit: 10
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        }
-                    }
-                }
+                options: chartOptions
             });
             
             // Force resize after render
@@ -465,10 +653,13 @@
         }
 
         function displayTable() {
-            if (!itemData || !itemData.priceHistory) return;
+            if (!itemData) return;
+
+            const priceHistory = getDisplayData();
+            if (!priceHistory || priceHistory.length === 0) return;
 
             const tbody = document.getElementById('priceTableBody');
-            tbody.innerHTML = itemData.priceHistory.slice().reverse().map(p => `
+            tbody.innerHTML = priceHistory.slice().reverse().map(p => `
                 <tr>
                     <td>${formatDateTime(p.date)}</td>
                     <td>${formatPrice(p.minBuyout)}</td>
@@ -481,7 +672,18 @@
 
         function formatPrice(price) {
             if (!price) return '-';
-            return price.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            
+            // Convert copper to gold/silver/copper
+            const gold = Math.floor(price / 10000);
+            const silver = Math.floor((price % 10000) / 100);
+            const copper = price % 100;
+            
+            let result = '';
+            if (gold > 0) result += gold + 'g ';
+            if (silver > 0) result += silver + 's ';
+            if (copper > 0 || result === '') result += copper + 'c';
+            
+            return result.trim();
         }
 
         function formatDate(dateString) {
