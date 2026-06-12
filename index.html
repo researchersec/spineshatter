@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lonewolf Auction Price History</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
-    <!-- WoWhead Tooltip Library -->
-    <script src="https://wow.zamimg.com/widgets/power.js"></script>
+    <title>Lonewolf Auction Price Wiki</title>
     <style>
         * {
             margin: 0;
@@ -14,572 +11,185 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --wow-gold: #ffd700;
-            --wow-orange: #ff8000;
-            --wow-purple: #a335ee;
-            --wow-blue: #0070dd;
-            --wow-green: #1eff00;
-            --wow-white: #ffffff;
-            --wow-gray: #9d9d9d;
-            --bg-dark: #0a0e27;
-            --bg-darker: #050609;
-            --bg-light: #1a1f3a;
-            --text-light: #d3d3d3;
-        }
-
         body {
             font-family: Arial, sans-serif;
-            background: var(--bg-darker);
-            color: var(--text-light);
-            line-height: 1.6;
+            background: #f5f5f5;
+            color: #333;
         }
 
         .header {
-            background: linear-gradient(180deg, #1a1f3a 0%, #0f1424 100%);
-            border-bottom: 2px solid var(--wow-gold);
-            padding: 15px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .header-content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
-        .logo {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--wow-gold);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-        }
-
-        .search-header {
-            flex: 1;
-            max-width: 400px;
-            margin: 0 30px;
-        }
-
-        .search-header input {
-            width: 100%;
-            padding: 10px 15px;
-            background: var(--bg-darker);
-            border: 2px solid var(--wow-gold);
-            color: var(--text-light);
-            border-radius: 4px;
-            font-size: 0.95em;
-        }
-
-        .search-header input:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 30px;
-            font-size: 0.9em;
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-size: 1.3em;
-            color: var(--wow-gold);
-            font-weight: bold;
-        }
-
-        .stat-label {
-            color: var(--wow-gray);
-            font-size: 0.85em;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 20px;
-        }
-
-        .sidebar {
-            background: var(--bg-light);
-            border: 1px solid var(--wow-gold);
-            border-radius: 4px;
-            padding: 15px;
-            height: fit-content;
-            position: sticky;
-            top: 80px;
-        }
-
-        .sidebar-title {
-            color: var(--wow-gold);
-            font-weight: bold;
+        .header h1 {
+            font-size: 2.5em;
             margin-bottom: 15px;
-            font-size: 1.1em;
-            border-bottom: 1px solid var(--wow-gold);
-            padding-bottom: 10px;
         }
 
-        .filter-group {
-            margin-bottom: 20px;
-        }
-
-        .filter-label {
-            color: var(--text-light);
-            font-size: 0.9em;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .filter-label input,
-        .filter-label select {
-            margin-right: 5px;
-        }
-
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 8px;
-            background: var(--bg-darker);
-            border: 1px solid var(--wow-gold);
-            color: var(--text-light);
-            border-radius: 4px;
-            margin-top: 5px;
-            font-size: 0.9em;
-        }
-
-        input[type="text"]:focus,
-        select:focus {
-            outline: none;
-            box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
-        }
-
-        .sort-btn {
-            display: block;
-            width: 100%;
-            padding: 8px;
-            background: var(--wow-gold);
-            color: var(--bg-darker);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-bottom: 8px;
-            transition: all 0.3s;
-        }
-
-        .sort-btn:hover {
-            background: var(--wow-orange);
-            transform: translateX(2px);
-        }
-
-        .sort-btn.active {
-            background: var(--wow-orange);
-            box-shadow: 0 0 10px rgba(255, 128, 0, 0.5);
-        }
-
-        .main-content {
-            background: var(--bg-light);
-            border: 1px solid var(--wow-gold);
-            border-radius: 4px;
-            padding: 20px;
-        }
-
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-        }
-
-        .item-card {
-            background: var(--bg-darker);
-            border: 2px solid var(--wow-gold);
-            border-radius: 4px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .item-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--wow-gold), transparent);
-        }
-
-        .item-card:hover {
-            border-color: var(--wow-orange);
-            background: var(--bg-light);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-            transform: translateY(-3px);
-        }
-
-        .item-card.loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
+        .search-box {
+            max-width: 500px;
             margin-bottom: 10px;
         }
 
-        .item-name {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: var(--wow-gold);
-            flex: 1;
-            word-break: break-word;
-            cursor: help;
-        }
-
-        .item-id {
-            color: var(--wow-gray);
-            font-size: 0.85em;
-            margin-left: 10px;
-            white-space: nowrap;
-        }
-
-        .item-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255, 215, 0, 0.2);
-            font-size: 0.9em;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .stat-row-label {
-            color: var(--wow-gray);
-        }
-
-        .stat-row-value {
-            color: var(--wow-gold);
-            font-weight: bold;
-        }
-
-        .stat-placeholder {
-            color: var(--wow-gray);
-            font-style: italic;
-            font-size: 0.85em;
-        }
-
-        .price-trend {
-            margin-top: 8px;
-            padding: 5px;
-            border-radius: 3px;
-            font-size: 0.85em;
-        }
-
-        .trend-up {
-            background: rgba(30, 255, 0, 0.2);
-            color: #1eff00;
-        }
-
-        .trend-down {
-            background: rgba(255, 0, 0, 0.2);
-            color: #ff6b6b;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
+        .search-box input {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            overflow-y: auto;
-        }
-
-        .modal.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: var(--bg-light);
-            margin: 20px auto;
-            padding: 30px;
-            border: 2px solid var(--wow-gold);
+            padding: 12px 15px;
+            border: none;
             border-radius: 4px;
-            width: 90%;
+            font-size: 1em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .container {
             max-width: 1200px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            animation: slideUp 0.3s;
+            margin: 30px auto;
+            padding: 0 20px;
         }
 
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: var(--wow-gold);
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .modal-close:hover {
-            color: var(--wow-orange);
-        }
-
-        .modal-header {
+        .stats {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--wow-gold);
-            padding-bottom: 15px;
+            gap: 30px;
         }
 
-        .modal-title {
-            flex: 1;
+        .stat-item {
+            display: flex;
+            flex-direction: column;
         }
 
-        .modal-title h2 {
-            color: var(--wow-gold);
-            font-size: 1.8em;
+        .stat-label {
+            color: #999;
+            font-size: 0.9em;
             margin-bottom: 5px;
         }
 
-        .modal-title p {
-            color: var(--wow-gray);
-            font-size: 0.9em;
-        }
-
-        .modal-loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--wow-gold);
-        }
-
-        .chart-container {
-            background: var(--bg-darker);
-            border: 1px solid var(--wow-gold);
-            border-radius: 4px;
-            padding: 15px;
-            margin: 20px 0;
-            position: relative;
-            height: 400px;
-        }
-
-        .chart-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .chart-tab {
-            padding: 8px 15px;
-            background: var(--bg-darker);
-            border: 1px solid var(--wow-gold);
-            color: var(--text-light);
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-        .chart-tab.active {
-            background: var(--wow-gold);
-            color: var(--bg-darker);
+        .stat-value {
+            font-size: 1.8em;
             font-weight: bold;
+            color: #667eea;
         }
 
-        .chart-tab:hover:not(.active) {
-            border-color: var(--wow-orange);
-            color: var(--wow-gold);
-        }
-
-        .price-table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            background: var(--bg-darker);
-            border: 1px solid var(--wow-gold);
+        .items-table {
+            background: white;
             border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             overflow: hidden;
         }
 
-        .price-table thead {
-            background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), transparent);
-            border-bottom: 2px solid var(--wow-gold);
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .price-table th {
-            padding: 12px;
+        thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #667eea;
+        }
+
+        th {
+            padding: 15px;
             text-align: left;
-            color: var(--wow-gold);
             font-weight: bold;
+            color: #667eea;
         }
 
-        .price-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
         }
 
-        .price-table tbody tr:hover {
-            background: rgba(255, 215, 0, 0.05);
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        tbody tr {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f0f0f5;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .item-name:hover {
+            text-decoration: underline;
+        }
+
+        .item-id {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
         }
 
         .loading {
             text-align: center;
             padding: 40px;
-            color: var(--wow-gold);
+            color: #667eea;
             font-size: 1.2em;
         }
 
         .error {
-            background: rgba(255, 0, 0, 0.1);
-            border: 2px solid #ff6b6b;
-            color: #ff9999;
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
             padding: 15px;
             border-radius: 4px;
             margin: 20px 0;
         }
 
-        .no-results {
-            background: var(--bg-darker);
-            border: 1px solid var(--wow-gold);
-            padding: 40px;
-            text-align: center;
-            color: var(--wow-gray);
-            border-radius: 4px;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 30px;
-        }
-
-        .pagination button {
-            padding: 10px 15px;
-            background: var(--wow-gold);
-            color: var(--bg-darker);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .pagination button:hover:not(:disabled) {
-            background: var(--wow-orange);
-        }
-
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .last-updated {
-            color: var(--wow-gray);
-            font-size: 0.85em;
-            margin-top: 10px;
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                position: static;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 10px;
-            }
-
-            .stats-bar {
-                gap: 15px;
-                font-size: 0.8em;
-            }
-        }
-
         @media (max-width: 768px) {
-            .header-content {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .stats {
                 flex-direction: column;
                 gap: 15px;
             }
 
-            .search-header {
-                max-width: 100%;
-                margin: 0;
+            table {
+                font-size: 0.9em;
             }
 
-            .stats-bar {
-                width: 100%;
-            }
-
-            .items-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-content {
-                width: 95%;
-                margin: 10px auto;
-                padding: 15px;
-            }
-
-            .chart-container {
-                height: 300px;
-            }
-
-            .price-table {
-                font-size: 0.85em;
-            }
-
-            .price-table th,
-            .price-table td {
-                padding: 8px;
+            th, td {
+                padding: 10px;
             }
         }
     </style>
@@ -588,87 +198,51 @@
     <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <div class="logo">⚔️ Lonewolf Auctions</div>
-            <div class="search-header">
-                <input type="text" id="headerSearch" placeholder="Search items..." onkeypress="if(event.key==='Enter') searchItems()">
-            </div>
-            <div class="stats-bar">
-                <div class="stat">
-                    <div class="stat-value" id="headerItems">-</div>
-                    <div class="stat-label">Items</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="headerUpdates">-</div>
-                    <div class="stat-label">Last Update</div>
-                </div>
+            <h1>⚔️ Lonewolf Auction Price Wiki</h1>
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Search items by name or ID..." onkeyup="filterItems()">
             </div>
         </div>
     </div>
 
+    <!-- Main Content -->
     <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="sidebar-title">Filters</div>
-            
-            <div class="filter-group">
-                <label class="filter-label">
-                    <input type="checkbox" id="filterRecent" onchange="applyFilters()"> Recently Updated
-                </label>
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">Total Items</div>
+                <div class="stat-value" id="totalItems">-</div>
             </div>
-
-            <div class="filter-group">
-                <label class="filter-label">
-                    <input type="checkbox" id="filterHigh" onchange="applyFilters()"> High Activity
-                </label>
+            <div class="stat-item">
+                <div class="stat-label">Last Updated</div>
+                <div class="stat-value" id="lastUpdated" style="font-size: 1em;">-</div>
             </div>
-
-            <div class="sidebar-title" style="margin-top: 20px;">Sort By</div>
-            
-            <button class="sort-btn active" onclick="sortItems('name')">Name</button>
-            <button class="sort-btn" onclick="sortItems('recent')">Recent</button>
-
-            <div class="last-updated" id="sidebarUpdated" style="margin-top: 20px;"></div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="items-grid" id="itemsGrid">
-                <div class="loading">Loading auction data...</div>
-            </div>
-            <div class="pagination" id="pagination"></div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div id="itemModal" class="modal" onclick="if(event.target === this) closeModal()">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            
-            <div class="modal-header">
-                <div class="modal-title">
-                    <h2 id="modalName"></h2>
-                    <p id="modalId"></p>
-                    <p id="modalStats" class="last-updated"></p>
-                </div>
-            </div>
-
-            <div id="modalBody">
-                <div class="modal-loading">Loading item details...</div>
-            </div>
+        <!-- Items Table -->
+        <div class="items-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>ID</th>
+                        <th>Current Price</th>
+                        <th>Avg Price</th>
+                        <th>Updates</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsTable">
+                    <tr>
+                        <td colspan="5" class="loading">Loading auction data...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        const ITEMS_PER_PAGE = 50;
-        const itemCache = {};
-        
         let allItems = [];
-        let filteredItems = [];
-        let currentSort = 'name';
-        let currentPage = 1;
-        let indexData = null;
-        let lastUpdateTime = null;
-        let chart = null;
+        let itemPrices = {};
 
         document.addEventListener('DOMContentLoaded', () => {
             loadIndex();
@@ -676,422 +250,109 @@
 
         async function loadIndex() {
             try {
-                const response = await fetch('prices/history/index.json');
+                const response = await fetch('prices/index.json');
                 if (!response.ok) throw new Error('Failed to load index');
-                indexData = await response.json();
+                const indexData = await response.json();
 
-                // Create items from index without loading full data
-                allItems = (indexData.items || []).map(item => ({
-                    itemId: item.itemId,
-                    itemName: item.itemName,
-                    dataFile: item.dataFile,
-                    loaded: false
-                }));
+                allItems = indexData.items || [];
+                document.getElementById('totalItems').textContent = allItems.length.toLocaleString();
 
-                // Update stats
-                document.getElementById('headerItems').textContent = allItems.length.toLocaleString();
-                
-                filteredItems = [...allItems];
-                sortItems(currentSort);
+                // Load first batch of prices
+                await loadPrices(0, Math.min(50, allItems.length));
                 displayItems();
             } catch (error) {
                 console.error('Error loading index:', error);
-                document.getElementById('itemsGrid').innerHTML = 
-                    `<div class="error">Error loading auction data: ${error.message}</div>`;
+                document.getElementById('itemsTable').innerHTML = 
+                    `<tr><td colspan="5" class="error">Error loading auction data: ${error.message}</td></tr>`;
             }
+        }
+
+        async function loadPrices(start, end) {
+            const promises = [];
+            for (let i = start; i < end && i < allItems.length; i++) {
+                const item = allItems[i];
+                if (!itemPrices[item.itemId]) {
+                    promises.push(
+                        fetch(`prices/${item.itemId}.json`)
+                            .then(r => r.json())
+                            .then(data => {
+                                const prices = (data.priceHistory || [])
+                                    .map(p => p.minBuyout || 0)
+                                    .filter(p => p > 0);
+                                
+                                const latest = data.priceHistory.length > 0 
+                                    ? data.priceHistory[data.priceHistory.length - 1].minBuyout || 0 
+                                    : 0;
+                                
+                                const avg = prices.length > 0 
+                                    ? Math.round(prices.reduce((a, b) => a + b) / prices.length) 
+                                    : 0;
+
+                                itemPrices[item.itemId] = {
+                                    latest: latest,
+                                    avg: avg,
+                                    dataPoints: data.priceHistory.length,
+                                    dateRange: data.dateRange
+                                };
+
+                                // Update last updated
+                                if (data.dateRange?.end) {
+                                    const date = new Date(data.dateRange.end);
+                                    document.getElementById('lastUpdated').textContent = date.toLocaleDateString();
+                                }
+                            })
+                            .catch(err => console.error(`Failed to load item ${item.itemId}:`, err))
+                    );
+                }
+            }
+            await Promise.all(promises);
         }
 
         function displayItems() {
-            const grid = document.getElementById('itemsGrid');
-            const start = (currentPage - 1) * ITEMS_PER_PAGE;
-            const end = start + ITEMS_PER_PAGE;
-            const pageItems = filteredItems.slice(start, end);
-
-            if (filteredItems.length === 0) {
-                grid.innerHTML = '<div class="no-results">No items found matching your filters.</div>';
-                updatePagination();
-                return;
-            }
-
-            grid.innerHTML = pageItems.map(item => {
-                if (itemCache[item.itemId]) {
-                    const data = itemCache[item.itemId];
-                    const priceTrend = data.latestPrice > data.avgPrice ? 'up' : 'down';
-                    const trendPercent = data.avgPrice > 0 ? 
-                        Math.round((Math.abs(data.latestPrice - data.avgPrice) / data.avgPrice) * 100) : 0;
-
-                    return `
-                        <div class="item-card" onclick="viewItem('${item.itemId}')">
-                            <div class="item-header">
-                                <span class="item-name">${escapeHtml(item.itemName)}</span>
-                                <span class="item-id">ID: ${item.itemId}</span>
-                            </div>
-                            <div class="item-stats">
-                                <div class="stat-row">
-                                    <span class="stat-row-label">Current:</span>
-                                    <span class="stat-row-value">${formatPrice(data.latestPrice)}</span>
-                                </div>
-                                <div class="stat-row">
-                                    <span class="stat-row-label">Average:</span>
-                                    <span class="stat-row-value">${formatPrice(data.avgPrice)}</span>
-                                </div>
-                                <div class="stat-row">
-                                    <span class="stat-row-label">Min:</span>
-                                    <span class="stat-row-value">${formatPrice(data.minPrice)}</span>
-                                </div>
-                                <div class="stat-row">
-                                    <span class="stat-row-label">Max:</span>
-                                    <span class="stat-row-value">${formatPrice(data.maxPrice)}</span>
-                                </div>
-                                <div class="stat-row">
-                                    <span class="stat-row-label">Updates:</span>
-                                    <span class="stat-row-value">${data.dataPoints}</span>
-                                </div>
-                                <div class="stat-row">
-                                    <span class="stat-row-label">Data Points:</span>
-                                    <span class="stat-row-value">${data.priceHistory.length}</span>
-                                </div>
-                            </div>
-                            <div class="price-trend trend-${priceTrend}">
-                                ${priceTrend === 'up' ? '📈' : '📉'} 
-                                ${priceTrend === 'up' ? 'Up' : 'Down'} ${trendPercent}% vs Average
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    return `
-                        <div class="item-card">
-                            <div class="item-header">
-                                <span class="item-name">${escapeHtml(item.itemName)}</span>
-                                <span class="item-id">ID: ${item.itemId}</span>
-                            </div>
-                            <div class="item-stats">
-                                <div class="stat-row">
-                                    <span class="stat-placeholder">Loading...</span>
-                                </div>
-                                <div class="stat-row">
-                                    <span class="stat-placeholder">Loading...</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            }).join('');
-
-            updatePagination();
-            preloadVisibleItems();
-        }
-
-        function updatePagination() {
-            const pagination = document.getElementById('pagination');
-            const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
-
-            let html = '';
-            if (currentPage > 1) {
-                html += `<button onclick="goToPage(${currentPage - 1})">← Previous</button>`;
-            }
-
-            html += `<span style="color: var(--wow-gold); padding: 10px;">Page ${currentPage} of ${totalPages}</span>`;
-
-            if (currentPage < totalPages) {
-                html += `<button onclick="goToPage(${currentPage + 1})">Next →</button>`;
-            }
-
-            pagination.innerHTML = html;
-        }
-
-        function goToPage(page) {
-            currentPage = page;
-            displayItems();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function preloadVisibleItems() {
-            const start = (currentPage - 1) * ITEMS_PER_PAGE;
-            const end = Math.min(start + ITEMS_PER_PAGE, filteredItems.length);
-
-            for (let i = start; i < end; i++) {
-                const item = filteredItems[i];
-                if (!itemCache[item.itemId]) {
-                    loadItemData(item.itemId);
-                }
-            }
-        }
-
-        async function loadItemData(itemId) {
-            if (itemCache[itemId]) return;
-
-            try {
-                const response = await fetch(`prices/history/${itemId}.json`);
-                if (!response.ok) throw new Error('Failed to load item');
-                const itemData = await response.json();
-
-                const priceHistory = itemData.priceHistory || [];
-                const prices = priceHistory.map(p => p.minBuyout || 0).filter(p => p > 0);
-
-                itemCache[itemId] = {
-                    dataPoints: itemData.dataPoints || 0,
-                    priceHistory: priceHistory,
-                    latestPrice: priceHistory.length > 0 ? priceHistory[priceHistory.length - 1].minBuyout || 0 : 0,
-                    avgPrice: prices.length > 0 ? Math.round(prices.reduce((a, b) => a + b) / prices.length) : 0,
-                    minPrice: prices.length > 0 ? Math.min(...prices) : 0,
-                    maxPrice: prices.length > 0 ? Math.max(...prices) : 0,
-                    dateRange: itemData.dateRange || {}
-                };
-
-                // Update last update time
-                if (itemCache[itemId].dateRange?.end && (!lastUpdateTime || new Date(itemCache[itemId].dateRange.end) > lastUpdateTime)) {
-                    lastUpdateTime = new Date(itemCache[itemId].dateRange.end);
-                    document.getElementById('headerUpdates').textContent = lastUpdateTime.toLocaleDateString();
-                    document.getElementById('sidebarUpdated').textContent = `Last updated: ${lastUpdateTime.toLocaleString()}`;
-                }
-
-                displayItems();
-            } catch (error) {
-                console.error(`Failed to load item ${itemId}:`, error);
-            }
-        }
-
-        function searchItems() {
-            currentPage = 1;
-            const query = document.getElementById('headerSearch').value.toLowerCase();
-            filteredItems = allItems.filter(item =>
+            const query = document.getElementById('search').value.toLowerCase();
+            const filtered = allItems.filter(item =>
                 item.itemName.toLowerCase().includes(query) ||
-                item.itemId.toLowerCase().includes(query)
+                item.itemId.toString().includes(query)
             );
-            sortItems(currentSort);
+
+            if (filtered.length === 0) {
+                document.getElementById('itemsTable').innerHTML = 
+                    '<tr><td colspan="5" class="no-results">No items found</td></tr>';
+                return;
+            }
+
+            // Load prices for visible items if needed
+            const visibleIndices = filtered.slice(0, 50).map(item => allItems.indexOf(item));
+            const maxIndex = Math.max(...visibleIndices);
+            if (maxIndex > 0) {
+                loadPrices(Math.max(0, maxIndex - 50), maxIndex + 1);
+            }
+
+            document.getElementById('itemsTable').innerHTML = filtered.map(item => {
+                const price = itemPrices[item.itemId];
+                return `
+                    <tr onclick="goToItem(${item.itemId})">
+                        <td><span class="item-name">${escapeHtml(item.itemName)}</span></td>
+                        <td><span class="item-id">${item.itemId}</span></td>
+                        <td class="price">${price ? formatPrice(price.latest) : '-'}</td>
+                        <td class="price">${price ? formatPrice(price.avg) : '-'}</td>
+                        <td>${price ? price.dataPoints : '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterItems() {
             displayItems();
         }
 
-        function applyFilters() {
-            currentPage = 1;
-            const filterRecent = document.getElementById('filterRecent').checked;
-            const filterHigh = document.getElementById('filterHigh').checked;
-
-            filteredItems = allItems.filter(item => {
-                const cached = itemCache[item.itemId];
-                if (filterRecent && cached && cached.dataPoints < 10) return false;
-                if (filterHigh && cached && cached.dataPoints < 20) return false;
-                return true;
-            });
-
-            sortItems(currentSort);
-            displayItems();
+        function goToItem(itemId) {
+            window.location.href = `item.html?id=${itemId}`;
         }
 
-        function sortItems(sortType) {
-            currentSort = sortType;
-            currentPage = 1;
-
-            // Update button styles
-            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
-            event.target?.classList.add('active');
-
-            if (sortType === 'name') {
-                filteredItems.sort((a, b) => a.itemName.localeCompare(b.itemName));
-            } else if (sortType === 'recent') {
-                filteredItems.sort((a, b) => {
-                    const aTime = itemCache[a.itemId]?.dateRange?.end || '';
-                    const bTime = itemCache[b.itemId]?.dateRange?.end || '';
-                    return new Date(bTime) - new Date(aTime);
-                });
-            }
-
-            displayItems();
-        }
-
-        async function viewItem(itemId) {
-            const item = allItems.find(i => i.itemId === itemId);
-            if (!item) return;
-
-            // Load data if not cached
-            if (!itemCache[itemId]) {
-                document.getElementById('itemModal').classList.add('active');
-                const modal = document.getElementById('itemModal');
-                modal.scrollTop = 0;
-                await loadItemData(itemId);
-            }
-
-            const data = itemCache[itemId];
-            if (!data) return;
-
-            // Update modal header
-            document.getElementById('modalName').textContent = item.itemName;
-            document.getElementById('modalId').textContent = `Item ID: ${item.itemId}`;
-            document.getElementById('modalStats').textContent = 
-                `Data Points: ${data.priceHistory.length} | Range: ${formatDate(data.dateRange?.start)} to ${formatDate(data.dateRange?.end)}`;
-
-            // Build modal body with tabs
-            let modalBody = document.getElementById('modalBody');
-            modalBody.innerHTML = `
-                <div class="chart-tabs">
-                    <button class="chart-tab active" onclick="switchChart(this, 'price')">Price History</button>
-                    <button class="chart-tab" onclick="switchChart(this, 'volume')">Volume</button>
-                    <button class="chart-tab" onclick="switchChart(this, 'auctions')">Auctions</button>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="priceChart"></canvas>
-                </div>
-
-                <table class="price-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Min Buyout</th>
-                            <th>Market Value</th>
-                            <th>Qty</th>
-                            <th>Auctions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="priceTableBody">
-                    </tbody>
-                </table>
-            `;
-
-            // Draw initial chart
-            drawChart(data.priceHistory, 'price');
-            displayTable(data.priceHistory);
-
-            // Show modal
-            document.getElementById('itemModal').classList.add('active');
-        }
-
-        function switchChart(button, type) {
-            document.querySelectorAll('.chart-tab').forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-
-            const itemId = document.getElementById('modalId').textContent.split(': ')[1];
-            const data = itemCache[itemId];
-            if (data) {
-                drawChart(data.priceHistory, type);
-            }
-        }
-
-        function drawChart(priceHistory, type = 'price') {
-            const canvas = document.getElementById('priceChart');
-            if (!canvas) return;
-
-            const ctx = canvas.getContext('2d');
-
-            if (chart) {
-                chart.destroy();
-            }
-
-            const dates = priceHistory.map(p => formatDate(p.date));
-            let data, label, color;
-
-            if (type === 'price') {
-                data = priceHistory.map(p => p.minBuyout || 0);
-                label = 'Min Buyout Price';
-                color = '#ffd700';
-            } else if (type === 'volume') {
-                data = priceHistory.map(p => p.quantity || 0);
-                label = 'Quantity';
-                color = '#ff8000';
-            } else if (type === 'auctions') {
-                data = priceHistory.map(p => p.numAuctions || 0);
-                label = 'Auction Count';
-                color = '#0070dd';
-            }
-
-            chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        borderColor: color,
-                        backgroundColor: color + '20',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 2,
-                        pointBackgroundColor: color,
-                        pointBorderColor: 'rgba(10, 14, 39, 1)',
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#d3d3d3',
-                                font: { size: 12 }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                color: '#d3d3d3',
-                                callback: type === 'price' ? function(value) {
-                                    return formatPrice(value);
-                                } : undefined
-                            },
-                            grid: {
-                                color: 'rgba(255, 215, 0, 0.1)'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: '#d3d3d3'
-                            },
-                            grid: {
-                                color: 'rgba(255, 215, 0, 0.1)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function displayTable(priceHistory) {
-            const tbody = document.getElementById('priceTableBody');
-            if (!tbody) return;
-
-            tbody.innerHTML = priceHistory.slice().reverse().map((p, idx) => `
-                <tr>
-                    <td>${formatDateTime(p.date)}</td>
-                    <td>${formatPrice(p.minBuyout)}</td>
-                    <td>${formatPrice(p.marketValue)}</td>
-                    <td>${p.quantity?.toLocaleString() || '-'}</td>
-                    <td>${p.numAuctions || '-'}</td>
-                </tr>
-            `).join('');
-        }
-
-        function closeModal() {
-            document.getElementById('itemModal').classList.remove('active');
-            if (chart) {
-                chart.destroy();
-                chart = null;
-            }
-        }
-
-        // Utility functions
         function formatPrice(price) {
-            if (price === null || price === undefined || price === 0) return '-';
+            if (!price) return '-';
             return price.toLocaleString(undefined, { maximumFractionDigits: 0 });
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return '-';
-            return new Date(dateString).toLocaleDateString();
-        }
-
-        function formatDateTime(dateString) {
-            if (!dateString) return '-';
-            return new Date(dateString).toLocaleString();
         }
 
         function escapeHtml(text) {
