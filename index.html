@@ -660,7 +660,7 @@
 
         async function loadIndex() {
             try {
-                const response = await fetch('prices/history/index.json');
+                const response = await fetch('prices/index.json');
                 if (!response.ok) throw new Error('Failed to load index');
                 indexData = await response.json();
 
@@ -678,7 +678,7 @@
                 // Load all item data
                 for (const item of allItems) {
                     try {
-                        const itemResponse = await fetch(`prices/history/${item.itemId}.json`);
+                        const itemResponse = await fetch(`prices/${item.itemId}.json`);
                         if (itemResponse.ok) {
                             const itemData = await itemResponse.json();
                             item.dataPoints = itemData.dataPoints || 0;
