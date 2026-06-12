@@ -232,6 +232,11 @@
             transform: translateY(-3px);
         }
 
+        .item-card.loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
         .item-header {
             display: flex;
             justify-content: space-between;
@@ -277,6 +282,12 @@
         .stat-row-value {
             color: var(--wow-gold);
             font-weight: bold;
+        }
+
+        .stat-placeholder {
+            color: var(--wow-gray);
+            font-style: italic;
+            font-size: 0.85em;
         }
 
         .price-trend {
@@ -383,6 +394,12 @@
             font-size: 0.9em;
         }
 
+        .modal-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--wow-gold);
+        }
+
         .chart-container {
             background: var(--bg-darker);
             border: 1px solid var(--wow-gold);
@@ -476,17 +493,38 @@
             border-radius: 4px;
         }
 
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            background: var(--wow-gold);
+            color: var(--bg-darker);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--wow-orange);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .last-updated {
             color: var(--wow-gray);
             font-size: 0.85em;
             margin-top: 10px;
         }
-
-        .quality-legendary { color: #ff8000; }
-        .quality-epic { color: #a335ee; }
-        .quality-rare { color: #0070dd; }
-        .quality-uncommon { color: #1eff00; }
-        .quality-common { color: #ffffff; }
 
         @media (max-width: 1024px) {
             .container {
@@ -561,11 +599,7 @@
                 </div>
                 <div class="stat">
                     <div class="stat-value" id="headerUpdates">-</div>
-                    <div class="stat-label">Updates</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="headerAvg">-</div>
-                    <div class="stat-label">Avg Price</div>
+                    <div class="stat-label">Last Update</div>
                 </div>
             </div>
         </div>
@@ -591,9 +625,7 @@
             <div class="sidebar-title" style="margin-top: 20px;">Sort By</div>
             
             <button class="sort-btn active" onclick="sortItems('name')">Name</button>
-            <button class="sort-btn" onclick="sortItems('price')">Price</button>
             <button class="sort-btn" onclick="sortItems('recent')">Recent</button>
-            <button class="sort-btn" onclick="sortItems('activity')">Activity</button>
 
             <div class="last-updated" id="sidebarUpdated" style="margin-top: 20px;"></div>
         </div>
@@ -603,6 +635,7 @@
             <div class="items-grid" id="itemsGrid">
                 <div class="loading">Loading auction data...</div>
             </div>
+            <div class="pagination" id="pagination"></div>
         </div>
     </div>
 
@@ -619,40 +652,23 @@
                 </div>
             </div>
 
-            <div class="chart-tabs">
-                <button class="chart-tab active" onclick="switchChart('price')">Price History</button>
-                <button class="chart-tab" onclick="switchChart('volume')">Volume</button>
-                <button class="chart-tab" onclick="switchChart('auctions')">Auctions</button>
+            <div id="modalBody">
+                <div class="modal-loading">Loading item details...</div>
             </div>
-
-            <div class="chart-container">
-                <canvas id="priceChart"></canvas>
-            </div>
-
-            <table class="price-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Min Buyout</th>
-                        <th>Market Value</th>
-                        <th>Qty</th>
-                        <th>Auctions</th>
-                    </tr>
-                </thead>
-                <tbody id="priceTableBody">
-                </tbody>
-            </table>
         </div>
     </div>
 
     <script>
+        const ITEMS_PER_PAGE = 50;
+        const itemCache = {};
+        
         let allItems = [];
         let filteredItems = [];
         let currentSort = 'name';
-        let currentChart = 'price';
-        let chart = null;
-        const ITEMS_PER_PAGE = 50;
+        let currentPage = 1;
         let indexData = null;
+        let lastUpdateTime = null;
+        let chart = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             loadIndex();
@@ -660,62 +676,21 @@
 
         async function loadIndex() {
             try {
-                const response = await fetch('prices/index.json');
+                const response = await fetch('prices/history/index.json');
                 if (!response.ok) throw new Error('Failed to load index');
                 indexData = await response.json();
 
-                let totalDataPoints = 0;
-                let totalPrice = 0;
-                let priceCount = 0;
-
+                // Create items from index without loading full data
                 allItems = (indexData.items || []).map(item => ({
-                    ...item,
-                    dataPoints: 0,
-                    latestPrice: 0,
-                    avgPrice: 0
+                    itemId: item.itemId,
+                    itemName: item.itemName,
+                    dataFile: item.dataFile,
+                    loaded: false
                 }));
 
-                // Load all item data
-                for (const item of allItems) {
-                    try {
-                        const itemResponse = await fetch(`prices/${item.itemId}.json`);
-                        if (itemResponse.ok) {
-                            const itemData = await itemResponse.json();
-                            item.dataPoints = itemData.dataPoints || 0;
-                            item.priceHistory = itemData.priceHistory || [];
-                            
-                            if (item.priceHistory.length > 0) {
-                                item.latestPrice = item.priceHistory[item.priceHistory.length - 1].minBuyout || 0;
-                                item.dateRange = itemData.dateRange || {};
-                                
-                                const prices = item.priceHistory.map(p => p.minBuyout || 0).filter(p => p > 0);
-                                item.avgPrice = prices.length > 0 ? Math.round(prices.reduce((a, b) => a + b) / prices.length) : 0;
-                                item.minPrice = Math.min(...prices);
-                                item.maxPrice = Math.max(...prices);
-                                
-                                totalDataPoints += item.dataPoints;
-                                totalPrice += item.avgPrice;
-                                priceCount++;
-                            }
-                        }
-                    } catch (e) {
-                        console.error(`Failed to load item ${item.itemId}:`, e);
-                    }
-                }
-
-                // Update header stats
-                const avgPrice = priceCount > 0 ? Math.round(totalPrice / priceCount) : 0;
+                // Update stats
                 document.getElementById('headerItems').textContent = allItems.length.toLocaleString();
-                document.getElementById('headerUpdates').textContent = totalDataPoints.toLocaleString();
-                document.getElementById('headerAvg').textContent = formatPrice(avgPrice);
-
-                // Update last updated time
-                if (allItems.length > 0 && allItems[0].dateRange?.end) {
-                    const lastDate = new Date(allItems[0].dateRange.end);
-                    const updated = `Last updated: ${lastDate.toLocaleString()}`;
-                    document.getElementById('sidebarUpdated').textContent = updated;
-                }
-
+                
                 filteredItems = [...allItems];
                 sortItems(currentSort);
                 displayItems();
@@ -728,59 +703,162 @@
 
         function displayItems() {
             const grid = document.getElementById('itemsGrid');
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const pageItems = filteredItems.slice(start, end);
 
             if (filteredItems.length === 0) {
                 grid.innerHTML = '<div class="no-results">No items found matching your filters.</div>';
+                updatePagination();
                 return;
             }
 
-            grid.innerHTML = filteredItems.slice(0, ITEMS_PER_PAGE).map(item => {
-                const priceTrend = item.latestPrice > item.avgPrice ? 'up' : 'down';
-                const trendPercent = item.avgPrice > 0 ? 
-                    Math.round((Math.abs(item.latestPrice - item.avgPrice) / item.avgPrice) * 100) : 0;
+            grid.innerHTML = pageItems.map(item => {
+                if (itemCache[item.itemId]) {
+                    const data = itemCache[item.itemId];
+                    const priceTrend = data.latestPrice > data.avgPrice ? 'up' : 'down';
+                    const trendPercent = data.avgPrice > 0 ? 
+                        Math.round((Math.abs(data.latestPrice - data.avgPrice) / data.avgPrice) * 100) : 0;
 
-                return `
-                    <div class="item-card" onclick="viewItem('${item.itemId}')">
-                        <div class="item-header">
-                            <span class="item-name">${escapeHtml(item.itemName)}</span>
-                            <span class="item-id">ID: ${item.itemId}</span>
+                    return `
+                        <div class="item-card" onclick="viewItem('${item.itemId}')">
+                            <div class="item-header">
+                                <span class="item-name">${escapeHtml(item.itemName)}</span>
+                                <span class="item-id">ID: ${item.itemId}</span>
+                            </div>
+                            <div class="item-stats">
+                                <div class="stat-row">
+                                    <span class="stat-row-label">Current:</span>
+                                    <span class="stat-row-value">${formatPrice(data.latestPrice)}</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-row-label">Average:</span>
+                                    <span class="stat-row-value">${formatPrice(data.avgPrice)}</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-row-label">Min:</span>
+                                    <span class="stat-row-value">${formatPrice(data.minPrice)}</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-row-label">Max:</span>
+                                    <span class="stat-row-value">${formatPrice(data.maxPrice)}</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-row-label">Updates:</span>
+                                    <span class="stat-row-value">${data.dataPoints}</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-row-label">Data Points:</span>
+                                    <span class="stat-row-value">${data.priceHistory.length}</span>
+                                </div>
+                            </div>
+                            <div class="price-trend trend-${priceTrend}">
+                                ${priceTrend === 'up' ? '📈' : '📉'} 
+                                ${priceTrend === 'up' ? 'Up' : 'Down'} ${trendPercent}% vs Average
+                            </div>
                         </div>
-                        <div class="item-stats">
-                            <div class="stat-row">
-                                <span class="stat-row-label">Current:</span>
-                                <span class="stat-row-value">${formatPrice(item.latestPrice)}</span>
+                    `;
+                } else {
+                    return `
+                        <div class="item-card">
+                            <div class="item-header">
+                                <span class="item-name">${escapeHtml(item.itemName)}</span>
+                                <span class="item-id">ID: ${item.itemId}</span>
                             </div>
-                            <div class="stat-row">
-                                <span class="stat-row-label">Average:</span>
-                                <span class="stat-row-value">${formatPrice(item.avgPrice)}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-row-label">Min:</span>
-                                <span class="stat-row-value">${formatPrice(item.minPrice)}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-row-label">Max:</span>
-                                <span class="stat-row-value">${formatPrice(item.maxPrice)}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-row-label">Updates:</span>
-                                <span class="stat-row-value">${item.dataPoints}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-row-label">Data Points:</span>
-                                <span class="stat-row-value">${item.priceHistory.length}</span>
+                            <div class="item-stats">
+                                <div class="stat-row">
+                                    <span class="stat-placeholder">Loading...</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-placeholder">Loading...</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="price-trend trend-${priceTrend}">
-                            ${priceTrend === 'up' ? '📈' : '📉'} 
-                            ${priceTrend === 'up' ? 'Up' : 'Down'} ${trendPercent}% vs Average
-                        </div>
-                    </div>
-                `;
+                    `;
+                }
             }).join('');
+
+            updatePagination();
+            preloadVisibleItems();
+        }
+
+        function updatePagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            if (currentPage > 1) {
+                html += `<button onclick="goToPage(${currentPage - 1})">← Previous</button>`;
+            }
+
+            html += `<span style="color: var(--wow-gold); padding: 10px;">Page ${currentPage} of ${totalPages}</span>`;
+
+            if (currentPage < totalPages) {
+                html += `<button onclick="goToPage(${currentPage + 1})">Next →</button>`;
+            }
+
+            pagination.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            displayItems();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function preloadVisibleItems() {
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = Math.min(start + ITEMS_PER_PAGE, filteredItems.length);
+
+            for (let i = start; i < end; i++) {
+                const item = filteredItems[i];
+                if (!itemCache[item.itemId]) {
+                    loadItemData(item.itemId);
+                }
+            }
+        }
+
+        async function loadItemData(itemId) {
+            if (itemCache[itemId]) return;
+
+            try {
+                const response = await fetch(`prices/history/${itemId}.json`);
+                if (!response.ok) throw new Error('Failed to load item');
+                const itemData = await response.json();
+
+                const priceHistory = itemData.priceHistory || [];
+                const prices = priceHistory.map(p => p.minBuyout || 0).filter(p => p > 0);
+
+                itemCache[itemId] = {
+                    dataPoints: itemData.dataPoints || 0,
+                    priceHistory: priceHistory,
+                    latestPrice: priceHistory.length > 0 ? priceHistory[priceHistory.length - 1].minBuyout || 0 : 0,
+                    avgPrice: prices.length > 0 ? Math.round(prices.reduce((a, b) => a + b) / prices.length) : 0,
+                    minPrice: prices.length > 0 ? Math.min(...prices) : 0,
+                    maxPrice: prices.length > 0 ? Math.max(...prices) : 0,
+                    dateRange: itemData.dateRange || {}
+                };
+
+                // Update last update time
+                if (itemCache[itemId].dateRange?.end && (!lastUpdateTime || new Date(itemCache[itemId].dateRange.end) > lastUpdateTime)) {
+                    lastUpdateTime = new Date(itemCache[itemId].dateRange.end);
+                    document.getElementById('headerUpdates').textContent = lastUpdateTime.toLocaleDateString();
+                    document.getElementById('sidebarUpdated').textContent = `Last updated: ${lastUpdateTime.toLocaleString()}`;
+                }
+
+                displayItems();
+            } catch (error) {
+                console.error(`Failed to load item ${itemId}:`, error);
+            }
         }
 
         function searchItems() {
+            currentPage = 1;
             const query = document.getElementById('headerSearch').value.toLowerCase();
             filteredItems = allItems.filter(item =>
                 item.itemName.toLowerCase().includes(query) ||
@@ -791,12 +869,14 @@
         }
 
         function applyFilters() {
+            currentPage = 1;
             const filterRecent = document.getElementById('filterRecent').checked;
             const filterHigh = document.getElementById('filterHigh').checked;
 
             filteredItems = allItems.filter(item => {
-                if (filterRecent && item.dataPoints < 10) return false;
-                if (filterHigh && item.dataPoints < 20) return false;
+                const cached = itemCache[item.itemId];
+                if (filterRecent && cached && cached.dataPoints < 10) return false;
+                if (filterHigh && cached && cached.dataPoints < 20) return false;
                 return true;
             });
 
@@ -806,6 +886,7 @@
 
         function sortItems(sortType) {
             currentSort = sortType;
+            currentPage = 1;
 
             // Update button styles
             document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
@@ -813,51 +894,90 @@
 
             if (sortType === 'name') {
                 filteredItems.sort((a, b) => a.itemName.localeCompare(b.itemName));
-            } else if (sortType === 'price') {
-                filteredItems.sort((a, b) => (b.latestPrice || 0) - (a.latestPrice || 0));
             } else if (sortType === 'recent') {
-                filteredItems.sort((a, b) => new Date(b.dateRange?.end || 0) - new Date(a.dateRange?.end || 0));
-            } else if (sortType === 'activity') {
-                filteredItems.sort((a, b) => (b.dataPoints || 0) - (a.dataPoints || 0));
+                filteredItems.sort((a, b) => {
+                    const aTime = itemCache[a.itemId]?.dateRange?.end || '';
+                    const bTime = itemCache[b.itemId]?.dateRange?.end || '';
+                    return new Date(bTime) - new Date(aTime);
+                });
             }
 
             displayItems();
         }
 
-        function viewItem(itemId) {
+        async function viewItem(itemId) {
             const item = allItems.find(i => i.itemId === itemId);
             if (!item) return;
+
+            // Load data if not cached
+            if (!itemCache[itemId]) {
+                document.getElementById('itemModal').classList.add('active');
+                const modal = document.getElementById('itemModal');
+                modal.scrollTop = 0;
+                await loadItemData(itemId);
+            }
+
+            const data = itemCache[itemId];
+            if (!data) return;
 
             // Update modal header
             document.getElementById('modalName').textContent = item.itemName;
             document.getElementById('modalId').textContent = `Item ID: ${item.itemId}`;
             document.getElementById('modalStats').textContent = 
-                `Data Points: ${item.priceHistory.length} | Range: ${formatDate(item.dateRange?.start)} to ${formatDate(item.dateRange?.end)}`;
+                `Data Points: ${data.priceHistory.length} | Range: ${formatDate(data.dateRange?.start)} to ${formatDate(data.dateRange?.end)}`;
 
-            // Draw chart
-            switchChart('price');
+            // Build modal body with tabs
+            let modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="chart-tabs">
+                    <button class="chart-tab active" onclick="switchChart(this, 'price')">Price History</button>
+                    <button class="chart-tab" onclick="switchChart(this, 'volume')">Volume</button>
+                    <button class="chart-tab" onclick="switchChart(this, 'auctions')">Auctions</button>
+                </div>
 
-            // Display table
-            displayTable(item.priceHistory);
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
 
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Min Buyout</th>
+                            <th>Market Value</th>
+                            <th>Qty</th>
+                            <th>Auctions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="priceTableBody">
+                    </tbody>
+                </table>
+            `;
+
+            // Draw initial chart
+            drawChart(data.priceHistory, 'price');
+            displayTable(data.priceHistory);
+
+            // Show modal
             document.getElementById('itemModal').classList.add('active');
         }
 
-        function switchChart(type) {
-            currentChart = type;
-
-            // Update tab styles
+        function switchChart(button, type) {
             document.querySelectorAll('.chart-tab').forEach(btn => btn.classList.remove('active'));
-            event.target?.classList.add('active');
+            button.classList.add('active');
 
-            const item = allItems.find(i => i.itemId === document.getElementById('modalId').textContent.split(': ')[1]);
-            if (item) {
-                drawChart(item.priceHistory, type);
+            const itemId = document.getElementById('modalId').textContent.split(': ')[1];
+            const data = itemCache[itemId];
+            if (data) {
+                drawChart(data.priceHistory, type);
             }
         }
 
         function drawChart(priceHistory, type = 'price') {
-            const ctx = document.getElementById('priceChart').getContext('2d');
+            const canvas = document.getElementById('priceChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
 
             if (chart) {
                 chart.destroy();
@@ -937,6 +1057,7 @@
 
         function displayTable(priceHistory) {
             const tbody = document.getElementById('priceTableBody');
+            if (!tbody) return;
 
             tbody.innerHTML = priceHistory.slice().reverse().map((p, idx) => `
                 <tr>
