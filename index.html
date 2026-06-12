@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lonewolf Auction Price Wiki</title>
+    <title>Spineshatter AH</title>
     <style>
         * {
             margin: 0;
@@ -12,89 +12,106 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #f7f9fb;
+            color: #111;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: white;
+            border-bottom: 1px solid #d1d5db;
+            padding: 20px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .header-content {
-            max-width: 1200px;
+            max-width: 1600px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 15px;
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #111;
+            letter-spacing: -0.5px;
         }
 
         .search-box {
-            max-width: 500px;
-            margin-bottom: 10px;
+            max-width: 400px;
         }
 
         .search-box input {
             width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 4px;
-            font-size: 1em;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.95em;
+            background: white;
+            color: #111;
+            transition: all 0.2s;
+        }
+
+        .search-box input::placeholder {
+            color: #9ca3af;
         }
 
         .search-box input:focus {
             outline: none;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
         }
 
         .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
         }
 
+        /* Stats Section */
         .stats {
             background: white;
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            gap: 30px;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #d1d5db;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 24px;
         }
 
         .stat-item {
             display: flex;
             flex-direction: column;
+            gap: 8px;
         }
 
         .stat-label {
-            color: #999;
-            font-size: 0.9em;
-            margin-bottom: 5px;
+            color: #6b7280;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .stat-value {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #111;
         }
 
+        /* Items Table */
         .items-table {
             background: white;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             overflow: hidden;
+            border: 1px solid #d1d5db;
         }
 
         table {
@@ -103,93 +120,143 @@
         }
 
         thead {
-            background: #f8f9fa;
-            border-bottom: 2px solid #667eea;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         th {
-            padding: 15px;
+            padding: 14px 24px;
             text-align: left;
-            font-weight: bold;
-            color: #667eea;
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        tbody tr:hover {
-            background: #f8f9fa;
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95em;
+            color: #111;
         }
 
         tbody tr {
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
 
         tbody tr:hover {
-            background: #f0f0f5;
+            background: #f9fafb;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
         }
 
         .item-name {
-            font-weight: 500;
-            color: #667eea;
+            font-weight: 600;
+            color: #0066cc;
             text-decoration: none;
+            transition: color 0.2s;
         }
 
         .item-name:hover {
+            color: #0052a3;
             text-decoration: underline;
         }
 
         .item-id {
-            color: #999;
+            color: #9ca3af;
             font-size: 0.9em;
+            display: block;
+            margin-top: 4px;
         }
 
         .price {
-            font-weight: bold;
-            color: #333;
+            font-weight: 600;
+            color: #111;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .price-positive {
+            color: #16a34a;
+        }
+
+        .price-neutral {
+            color: #6b7280;
         }
 
         .no-results {
             text-align: center;
-            padding: 40px;
-            color: #999;
+            padding: 60px 24px;
+            color: #9ca3af;
+            font-size: 1em;
         }
 
         .loading {
             text-align: center;
-            padding: 40px;
-            color: #667eea;
-            font-size: 1.2em;
+            padding: 60px 24px;
+            color: #0066cc;
+            font-size: 1em;
+            font-weight: 500;
         }
 
         .error {
-            background: #fee;
-            border: 1px solid #fcc;
-            color: #c33;
-            padding: 15px;
-            border-radius: 4px;
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+            padding: 16px 24px;
+            border-radius: 6px;
             margin: 20px 0;
+            font-weight: 500;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
+            .header-content {
+                padding: 0 16px;
+            }
+
             .header h1 {
-                font-size: 1.8em;
+                font-size: 1.3em;
+                margin-bottom: 12px;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .container {
+                padding: 12px;
             }
 
             .stats {
-                flex-direction: column;
-                gap: 15px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .stat-label {
+                font-size: 0.75em;
+            }
+
+            .stat-value {
+                font-size: 1.2em;
             }
 
             table {
-                font-size: 0.9em;
+                font-size: 0.85em;
             }
 
             th, td {
-                padding: 10px;
+                padding: 12px 16px;
+            }
+
+            .item-id {
+                margin-top: 2px;
+                font-size: 0.8em;
             }
         }
     </style>
@@ -198,9 +265,14 @@
     <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <h1>⚔️ Lonewolf Auction Price Wiki</h1>
             <div class="search-box">
-                <input type="text" id="search" placeholder="Search items by name or ID..." onkeyup="filterItems()">
+                <input 
+                    type="text" 
+                    id="search" 
+                    placeholder="Search items by name or ID..." 
+                    onkeyup="filterItems()"
+                    autocomplete="off"
+                >
             </div>
         </div>
     </div>
@@ -225,10 +297,10 @@
                 <thead>
                     <tr>
                         <th>Item Name</th>
-                        <th>ID</th>
+                        <th>Item ID</th>
                         <th>Current Price</th>
                         <th>Avg Price</th>
-                        <th>Updates</th>
+                        <th>Data Points</th>
                     </tr>
                 </thead>
                 <tbody id="itemsTable">
@@ -332,11 +404,15 @@
                 const price = itemPrices[item.itemId];
                 return `
                     <tr onclick="goToItem(${item.itemId})">
-                        <td><span class="item-name">${escapeHtml(item.itemName)}</span></td>
-                        <td><span class="item-id">${item.itemId}</span></td>
+                        <td>
+                            <span class="item-name">${escapeHtml(item.itemName)}</span>
+                        </td>
+                        <td>
+                            <span class="item-id">#${item.itemId}</span>
+                        </td>
                         <td class="price">${price ? formatPrice(price.latest) : '-'}</td>
                         <td class="price">${price ? formatPrice(price.avg) : '-'}</td>
-                        <td>${price ? price.dataPoints : '-'}</td>
+                        <td>${price ? price.dataPoints.toLocaleString() : '-'}</td>
                     </tr>
                 `;
             }).join('');
@@ -352,7 +428,18 @@
 
         function formatPrice(price) {
             if (!price) return '-';
-            return price.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            
+            // Convert copper to gold/silver/copper
+            const gold = Math.floor(price / 10000);
+            const silver = Math.floor((price % 10000) / 100);
+            const copper = price % 100;
+            
+            let result = '';
+            if (gold > 0) result += gold + 'g ';
+            if (silver > 0) result += silver + 's ';
+            if (copper > 0 || result === '') result += copper + 'c';
+            
+            return result.trim();
         }
 
         function escapeHtml(text) {
