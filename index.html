@@ -66,6 +66,56 @@
             box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
         }
 
+        .search-container {
+            position: relative;
+        }
+
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            margin-top: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+        }
+
+        .autocomplete-suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: #f9fafb;
+        }
+
+        .suggestion-item .item-name {
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+        .suggestion-item .item-id {
+            color: #9ca3af;
+            font-size: 0.85em;
+            margin-left: 8px;
+        }
+
         .container {
             max-width: 1600px;
             margin: 0 auto;
@@ -112,6 +162,39 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             overflow: hidden;
             border: 1px solid #d1d5db;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #111;
+        }
+
+        .price-up {
+            color: #16a34a;
+        }
+
+        .price-down {
+            color: #dc2626;
+        }
+
+        .price-change {
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .price-change.positive {
+            color: #16a34a;
+        }
+
+        .price-change.negative {
+            color: #dc2626;
+        }
+
+        .price-change.neutral {
+            color: #6b7280;
         }
 
         table {
@@ -132,6 +215,15 @@
             font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th.sortable:hover {
+            background: #f3f4f6;
         }
 
         td {
@@ -186,6 +278,10 @@
 
         .price-neutral {
             color: #6b7280;
+        }
+
+        .price-negative {
+            color: #dc2626;
         }
 
         .no-results {
@@ -265,15 +361,17 @@
     <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <div class="search-box">
-                <input 
-                    type="text" 
-                    id="search" 
-                    placeholder="Search items by name or ID..." 
-                    onkeyup="filterItems()"
-                    autocomplete="off"
-                    autofocus
-                >
+            <div class="search-container">
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        id="search" 
+                        placeholder="Search items by name or ID..." 
+                        autocomplete="off"
+                        autofocus
+                    >
+                </div>
+                <div class="autocomplete-suggestions" id="autocompleteSuggestions"></div>
             </div>
         </div>
     </div>
@@ -292,8 +390,8 @@
             </div>
         </div>
 
-        <!-- Items Table -->
-        <div class="items-table">
+        <!-- Items Table (hidden) -->
+        <div class="items-table" style="display: none;">
             <table>
                 <thead>
                     <tr>
@@ -305,9 +403,6 @@
                     </tr>
                 </thead>
                 <tbody id="itemsTable">
-                    <tr>
-                        <td colspan="5" class="loading">Loading auction data...</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -316,9 +411,12 @@
     <script>
         let allItems = [];
         let itemPrices = {};
+        let itemIcons = {};
 
         document.addEventListener('DOMContentLoaded', () => {
             loadIndex();
+            loadIcons();
+            setupSearch();
         });
 
         async function loadIndex() {
@@ -329,14 +427,22 @@
 
                 allItems = indexData.items || [];
                 document.getElementById('totalItems').textContent = allItems.length.toLocaleString();
-
-                // Load first batch of prices
-                await loadPrices(0, Math.min(50, allItems.length));
-                displayItems();
             } catch (error) {
                 console.error('Error loading index:', error);
-                document.getElementById('itemsTable').innerHTML = 
-                    `<tr><td colspan="5" class="error">Error loading auction data: ${error.message}</td></tr>`;
+            }
+        }
+
+        async function loadIcons() {
+            try {
+                const response = await fetch('icons.json');
+                if (!response.ok) throw new Error('Failed to load icons');
+                const iconsData = await response.json();
+
+                iconsData.forEach(icon => {
+                    itemIcons[icon.ID] = icon.ModifiedPath;
+                });
+            } catch (error) {
+                console.error('Error loading icons:', error);
             }
         }
 
@@ -361,11 +467,14 @@
                                     ? Math.round(prices.reduce((a, b) => a + b) / prices.length) 
                                     : 0;
 
+                                const change = avg > 0 ? ((latest - avg) / avg * 100) : 0;
+
                                 itemPrices[item.itemId] = {
                                     latest: latest,
                                     avg: avg,
                                     dataPoints: data.priceHistory.length,
-                                    dateRange: data.dateRange
+                                    dateRange: data.dateRange,
+                                    change: change
                                 };
 
                                 // Update last updated
@@ -381,46 +490,70 @@
             await Promise.all(promises);
         }
 
-        function displayItems() {
-            const query = document.getElementById('search').value.toLowerCase();
-            const filtered = allItems.filter(item =>
+        function setupSearch() {
+            const searchInput = document.getElementById('search');
+            const suggestionsBox = document.getElementById('autocompleteSuggestions');
+            let debounceTimer;
+
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(debounceTimer);
+                const query = e.target.value.toLowerCase().trim();
+                
+                if (query.length < 2) {
+                    suggestionsBox.classList.remove('active');
+                    return;
+                }
+
+                debounceTimer = setTimeout(() => {
+                    showSuggestions(query);
+                }, 200);
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    suggestionsBox.classList.remove('active');
+                }
+            });
+
+            // Close suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-container')) {
+                    suggestionsBox.classList.remove('active');
+                }
+            });
+        }
+
+        function showSuggestions(query) {
+            const suggestionsBox = document.getElementById('autocompleteSuggestions');
+            
+            const matches = allItems.filter(item =>
                 item.itemName.toLowerCase().includes(query) ||
                 item.itemId.toString().includes(query)
-            );
+            ).slice(0, 10);
 
-            if (filtered.length === 0) {
-                document.getElementById('itemsTable').innerHTML = 
-                    '<tr><td colspan="5" class="no-results">No items found</td></tr>';
+            if (matches.length === 0) {
+                suggestionsBox.classList.remove('active');
                 return;
             }
 
-            // Load prices for visible items if needed
-            const visibleIndices = filtered.slice(0, 50).map(item => allItems.indexOf(item));
-            const maxIndex = Math.max(...visibleIndices);
-            if (maxIndex > 0) {
-                loadPrices(Math.max(0, maxIndex - 50), maxIndex + 1);
-            }
-
-            document.getElementById('itemsTable').innerHTML = filtered.map(item => {
+            suggestionsBox.innerHTML = matches.map(item => {
                 const price = itemPrices[item.itemId];
+                const iconPath = itemIcons[item.itemId];
+                const iconHtml = iconPath ? `<img src="https://wow.zamimg.com/images/wow/icons/large/${iconPath}.jpg" alt="" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px; border-radius: 4px;">` : '';
                 return `
-                    <tr onclick="goToItem(${item.itemId})">
-                        <td>
-                            <span class="item-name">${escapeHtml(item.itemName)}</span>
-                        </td>
-                        <td>
-                            <span class="item-id">#${item.itemId}</span>
-                        </td>
-                        <td class="price">${price ? formatPrice(price.latest) : '-'}</td>
-                        <td class="price">${price ? formatPrice(price.avg) : '-'}</td>
-                        <td>${price ? price.dataPoints.toLocaleString() : '-'}</td>
-                    </tr>
+                    <div class="suggestion-item" onclick="selectSuggestion(${item.itemId})">
+                        ${iconHtml}
+                        <span class="item-name">${escapeHtml(item.itemName)}</span>
+                        ${price ? `<span style="float: right; color: #6b7280; font-size: 0.85em;">${formatPrice(price.latest)}</span>` : ''}
+                    </div>
                 `;
             }).join('');
+
+            suggestionsBox.classList.add('active');
         }
 
-        function filterItems() {
-            displayItems();
+        function selectSuggestion(itemId) {
+            goToItem(itemId);
         }
 
         function goToItem(itemId) {
