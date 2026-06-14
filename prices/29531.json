@@ -16089,11 +16089,91 @@
       "marketValue": 333309,
       "quantity": 1,
       "numAuctions": 1
+    },
+    {
+      "date": "2026-06-13T12:15:47+00:00",
+      "timestamp": 1781352947,
+      "minBuyout": 399994,
+      "marketValue": 315961,
+      "quantity": 1,
+      "numAuctions": 1
+    },
+    {
+      "date": "2026-06-13T14:35:42+00:00",
+      "timestamp": 1781361342,
+      "minBuyout": 399993,
+      "marketValue": 315703,
+      "quantity": 2,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-13T16:03:53+00:00",
+      "timestamp": 1781366633,
+      "minBuyout": 399993,
+      "marketValue": 317148,
+      "quantity": 2,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-13T17:43:35+00:00",
+      "timestamp": 1781372615,
+      "minBuyout": 399992,
+      "marketValue": 319085,
+      "quantity": 3,
+      "numAuctions": 3
+    },
+    {
+      "date": "2026-06-13T18:57:22+00:00",
+      "timestamp": 1781377042,
+      "minBuyout": 399992,
+      "marketValue": 320738,
+      "quantity": 3,
+      "numAuctions": 3
+    },
+    {
+      "date": "2026-06-13T20:15:46+00:00",
+      "timestamp": 1781381746,
+      "minBuyout": 200000,
+      "marketValue": 321667,
+      "quantity": 2,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-13T21:43:12+00:00",
+      "timestamp": 1781386992,
+      "minBuyout": 200000,
+      "marketValue": 324031,
+      "quantity": 2,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-13T22:46:12+00:00",
+      "timestamp": 1781390772,
+      "minBuyout": 200000,
+      "marketValue": 323124,
+      "quantity": 2,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-14T00:01:25+00:00",
+      "timestamp": 1781395285,
+      "minBuyout": 200000,
+      "marketValue": 321035,
+      "quantity": 2,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-14T05:04:22+00:00",
+      "timestamp": 1781413462,
+      "minBuyout": 200000,
+      "marketValue": 321333,
+      "quantity": 2,
+      "numAuctions": 2
     }
   ],
-  "dataPoints": 2011,
+  "dataPoints": 2021,
   "dateRange": {
     "start": "2026-02-10T15:19:31+00:00",
-    "end": "2026-06-13T10:43:52+00:00"
+    "end": "2026-06-14T05:04:22+00:00"
   }
 }
