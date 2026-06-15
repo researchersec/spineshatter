@@ -135,6 +135,91 @@
             gap: 24px;
         }
 
+        /* Top Lists Section */
+        .top-lists {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .top-list-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #d1d5db;
+            overflow: hidden;
+        }
+
+        .top-list-header {
+            background: #f9fafb;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 700;
+            font-size: 1em;
+            color: #111;
+        }
+
+        .top-list-content {
+            padding: 0;
+        }
+
+        .top-list-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .top-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .top-list-item:hover {
+            background: #f9fafb;
+        }
+
+        .top-list-rank {
+            font-weight: 700;
+            color: #9ca3af;
+            font-size: 0.9em;
+            width: 24px;
+            margin-right: 12px;
+        }
+
+        .top-list-item-info {
+            flex: 1;
+        }
+
+        .top-list-item-name {
+            font-weight: 600;
+            color: #0066cc;
+            font-size: 0.95em;
+        }
+
+        .top-list-item-value {
+            font-weight: 600;
+            color: #111;
+            font-size: 0.9em;
+        }
+
+        .top-list-item-change {
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-left: 8px;
+        }
+
+        .top-list-item-change.positive {
+            color: #16a34a;
+        }
+
+        .top-list-item-change.negative {
+            color: #dc2626;
+        }
+
         .stat-item {
             display: flex;
             flex-direction: column;
@@ -385,8 +470,48 @@
                 <div class="stat-value" id="totalItems">-</div>
             </div>
             <div class="stat-item">
+                <div class="stat-label">Total Market Value</div>
+                <div class="stat-value" id="totalMarketValue">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Average Price</div>
+                <div class="stat-value" id="averagePrice">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Total Quantity Traded</div>
+                <div class="stat-value" id="totalQuantity">-</div>
+            </div>
+            <div class="stat-item">
                 <div class="stat-label">Last Updated</div>
                 <div class="stat-value" id="lastUpdated" style="font-size: 1em;">-</div>
+            </div>
+        </div>
+
+        <!-- Top Lists -->
+        <div class="top-lists" id="topLists" style="display: none;">
+            <div class="top-list-card">
+                <div class="top-list-header">Most Expensive</div>
+                <div class="top-list-content" id="topExpensive"></div>
+            </div>
+            <div class="top-list-card">
+                <div class="top-list-header">Top Gainers</div>
+                <div class="top-list-content" id="topGainers"></div>
+            </div>
+            <div class="top-list-card">
+                <div class="top-list-header">Top Losers</div>
+                <div class="top-list-content" id="topLosers"></div>
+            </div>
+            <div class="top-list-card">
+                <div class="top-list-header">Most Volatile</div>
+                <div class="top-list-content" id="mostVolatile"></div>
+            </div>
+            <div class="top-list-card">
+                <div class="top-list-header">Most Traded</div>
+                <div class="top-list-content" id="mostTraded"></div>
+            </div>
+            <div class="top-list-card">
+                <div class="top-list-header">7-Day Trends</div>
+                <div class="top-list-content" id="sevenDayTrends"></div>
             </div>
         </div>
 
@@ -415,6 +540,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             loadIndex();
+            loadStatistics();
             loadIcons();
             setupSearch();
         });
@@ -430,6 +556,78 @@
             } catch (error) {
                 console.error('Error loading index:', error);
             }
+        }
+
+        async function loadStatistics() {
+            try {
+                const response = await fetch('prices/history/statistics.json');
+                if (!response.ok) throw new Error('Failed to load statistics');
+                const stats = await response.json();
+
+                // Update market summary
+                const summary = stats.marketSummary || {};
+                document.getElementById('totalMarketValue').textContent = formatPrice(summary.totalMarketValue || 0);
+                document.getElementById('averagePrice').textContent = formatPrice(summary.averagePrice || 0);
+                document.getElementById('totalQuantity').textContent = (summary.totalQuantityTraded || 0).toLocaleString();
+
+                // Update last updated
+                if (stats.generatedAt) {
+                    const date = new Date(stats.generatedAt);
+                    document.getElementById('lastUpdated').textContent = date.toLocaleString();
+                }
+
+                // Show top lists
+                document.getElementById('topLists').style.display = 'grid';
+
+                // Render top lists
+                renderTopList('topExpensive', stats.topExpensive, 'currentPrice', 'price');
+                renderTopList('topGainers', stats.topGainers, 'priceChangePct', 'percentage');
+                renderTopList('topLosers', stats.topLosers, 'priceChangePct', 'percentage');
+                renderTopList('mostVolatile', stats.mostVolatile, 'volatility', 'price');
+                renderTopList('mostTraded', stats.mostTraded, 'totalQuantity', 'number');
+                renderTopList('sevenDayTrends', stats.recentTrends?.sevenDay, 'changePct', 'percentage');
+
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        function renderTopList(containerId, items, valueKey, formatType) {
+            const container = document.getElementById(containerId);
+            if (!items || items.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: #9ca3af;">No data available</div>';
+                return;
+            }
+
+            container.innerHTML = items.slice(0, 10).map((item, index) => {
+                const value = item[valueKey];
+                let formattedValue;
+                let changeClass = '';
+
+                if (formatType === 'price') {
+                    formattedValue = formatPrice(value);
+                } else if (formatType === 'percentage') {
+                    formattedValue = value.toFixed(1) + '%';
+                    changeClass = value >= 0 ? 'positive' : 'negative';
+                } else if (formatType === 'number') {
+                    formattedValue = value.toLocaleString();
+                } else {
+                    formattedValue = value;
+                }
+
+                return `
+                    <div class="top-list-item" onclick="goToItem(${item.itemId})">
+                        <span class="top-list-rank">${index + 1}</span>
+                        <div class="top-list-item-info">
+                            <div class="top-list-item-name">${escapeHtml(item.itemName)}</div>
+                        </div>
+                        <div>
+                            <span class="top-list-item-value">${formattedValue}</span>
+                            ${formatType === 'percentage' ? `<span class="top-list-item-change ${changeClass}">${value >= 0 ? '↑' : '↓'}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         async function loadIcons() {
