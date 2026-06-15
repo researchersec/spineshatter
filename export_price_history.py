@@ -10,6 +10,7 @@ import datetime
 import os
 from pathlib import Path
 from collections import defaultdict
+from statistics import mean, stdev
 
 def export_price_history(repo_path='.',
                          file_path='horde.json',
@@ -137,6 +138,183 @@ def export_price_history(repo_path='.',
         json.dump(index_data, f, indent=2)
     
     print(f"Created index file: {index_file}")
+    
+    # Generate frontpage statistics
+    generate_statistics(output_dir, price_history, item_info)
+
+def generate_statistics(output_dir, price_history, item_info):
+    """
+    Generate cool statistics for the frontpage.
+    
+    Args:
+        output_dir: Directory containing price history files
+        price_history: Dictionary of item_id -> list of price points
+        item_info: Dictionary of item_id -> item metadata
+    """
+    print("\nGenerating frontpage statistics...")
+    
+    stats = {
+        'generatedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'marketSummary': {},
+        'topExpensive': [],
+        'topGainers': [],
+        'topLosers': [],
+        'mostVolatile': [],
+        'mostTraded': [],
+        'recentTrends': {}
+    }
+    
+    # Calculate statistics for each item
+    item_stats = {}
+    total_market_value = 0
+    total_quantity = 0
+    total_auctions = 0
+    
+    for item_id, prices in price_history.items():
+        if not prices:
+            continue
+        
+        # Sort by date
+        sorted_prices = sorted(prices, key=lambda x: x['date'])
+        latest = sorted_prices[-1]
+        earliest = sorted_prices[0]
+        
+        # Calculate metrics
+        current_price = latest.get('marketValue') or latest.get('minBuyout', 0)
+        earliest_price = earliest.get('marketValue') or earliest.get('minBuyout', 0)
+        
+        # Price change percentage
+        price_change_pct = 0
+        if earliest_price > 0:
+            price_change_pct = ((current_price - earliest_price) / earliest_price) * 100
+        
+        # Volatility (standard deviation of prices)
+        price_values = [p.get('marketValue') or p.get('minBuyout', 0) for p in sorted_prices if p.get('marketValue') or p.get('minBuyout')]
+        volatility = 0
+        if len(price_values) > 1:
+            try:
+                volatility = stdev(price_values)
+            except:
+                volatility = 0
+        
+        # Total traded quantity
+        total_qty = sum(p.get('quantity', 0) for p in sorted_prices)
+        total_auc = sum(p.get('numAuctions', 0) for p in sorted_prices)
+        
+        item_stats[item_id] = {
+            'itemId': item_id,
+            'itemName': item_info[item_id]['itemName'],
+            'currentPrice': current_price,
+            'earliestPrice': earliest_price,
+            'priceChangePct': price_change_pct,
+            'volatility': volatility,
+            'totalQuantity': total_qty,
+            'totalAuctions': total_auc,
+            'dataPoints': len(sorted_prices)
+        }
+        
+        total_market_value += current_price
+        total_quantity += total_qty
+        total_auctions += total_auc
+    
+    # Market summary
+    stats['marketSummary'] = {
+        'totalItems': len(item_stats),
+        'totalMarketValue': total_market_value,
+        'averagePrice': total_market_value / len(item_stats) if item_stats else 0,
+        'totalQuantityTraded': total_quantity,
+        'totalAuctions': total_auctions
+    }
+    
+    # Top 10 most expensive
+    stats['topExpensive'] = sorted(
+        item_stats.values(),
+        key=lambda x: x['currentPrice'],
+        reverse=True
+    )[:10]
+    
+    # Top 10 biggest gainers
+    stats['topGainers'] = sorted(
+        [x for x in item_stats.values() if x['priceChangePct'] > 0],
+        key=lambda x: x['priceChangePct'],
+        reverse=True
+    )[:10]
+    
+    # Top 10 biggest losers
+    stats['topLosers'] = sorted(
+        [x for x in item_stats.values() if x['priceChangePct'] < 0],
+        key=lambda x: x['priceChangePct']
+    )[:10]
+    
+    # Most volatile
+    stats['mostVolatile'] = sorted(
+        item_stats.values(),
+        key=lambda x: x['volatility'],
+        reverse=True
+    )[:10]
+    
+    # Most traded (by quantity)
+    stats['mostTraded'] = sorted(
+        item_stats.values(),
+        key=lambda x: x['totalQuantity'],
+        reverse=True
+    )[:10]
+    
+    # Recent trends (7-day and 30-day changes)
+    now = datetime.datetime.now(datetime.timezone.utc)
+    seven_days_ago = now - datetime.timedelta(days=7)
+    thirty_days_ago = now - datetime.timedelta(days=30)
+    
+    recent_stats = {'sevenDay': [], 'thirtyDay': []}
+    
+    for item_id, item_stat in item_stats.items():
+        prices = price_history[item_id]
+        
+        # 7-day trend
+        recent_7d = [p for p in prices if datetime.datetime.fromisoformat(p['date']) >= seven_days_ago]
+        if len(recent_7d) >= 2:
+            start_7d = recent_7d[0].get('marketValue') or recent_7d[0].get('minBuyout', 0)
+            end_7d = recent_7d[-1].get('marketValue') or recent_7d[-1].get('minBuyout', 0)
+            if start_7d > 0:
+                change_7d = ((end_7d - start_7d) / start_7d) * 100
+                recent_stats['sevenDay'].append({
+                    'itemId': item_id,
+                    'itemName': item_stat['itemName'],
+                    'changePct': change_7d,
+                    'startPrice': start_7d,
+                    'endPrice': end_7d
+                })
+        
+        # 30-day trend
+        recent_30d = [p for p in prices if datetime.datetime.fromisoformat(p['date']) >= thirty_days_ago]
+        if len(recent_30d) >= 2:
+            start_30d = recent_30d[0].get('marketValue') or recent_30d[0].get('minBuyout', 0)
+            end_30d = recent_30d[-1].get('marketValue') or recent_30d[-1].get('minBuyout', 0)
+            if start_30d > 0:
+                change_30d = ((end_30d - start_30d) / start_30d) * 100
+                recent_stats['thirtyDay'].append({
+                    'itemId': item_id,
+                    'itemName': item_stat['itemName'],
+                    'changePct': change_30d,
+                    'startPrice': start_30d,
+                    'endPrice': end_30d
+                })
+    
+    # Sort and limit recent trends
+    recent_stats['sevenDay'] = sorted(recent_stats['sevenDay'], key=lambda x: x['changePct'], reverse=True)[:10]
+    recent_stats['thirtyDay'] = sorted(recent_stats['thirtyDay'], key=lambda x: x['changePct'], reverse=True)[:10]
+    stats['recentTrends'] = recent_stats
+    
+    # Write statistics file
+    stats_file = os.path.join(output_dir, 'statistics.json')
+    with open(stats_file, 'w') as f:
+        json.dump(stats, f, indent=2)
+    
+    print(f"Created statistics file: {stats_file}")
+    print(f"  - Total items tracked: {stats['marketSummary']['totalItems']}")
+    print(f"  - Total market value: {stats['marketSummary']['totalMarketValue']:,.0f}")
+    print(f"  - Average price: {stats['marketSummary']['averagePrice']:,.0f}")
+
 
 if __name__ == '__main__':
     # Export with default settings
