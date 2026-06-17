@@ -21193,11 +21193,27 @@
       "marketValue": 39297,
       "quantity": 6,
       "numAuctions": 5
+    },
+    {
+      "date": "2026-06-17T08:56:40+00:00",
+      "timestamp": 1781686600,
+      "minBuyout": 30077,
+      "marketValue": 42313,
+      "quantity": 3,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-17T12:50:09+00:00",
+      "timestamp": 1781700609,
+      "minBuyout": 42935,
+      "marketValue": 40596,
+      "quantity": 2,
+      "numAuctions": 2
     }
   ],
-  "dataPoints": 2649,
+  "dataPoints": 2651,
   "dateRange": {
     "start": "2026-01-15T15:19:47+00:00",
-    "end": "2026-06-17T03:52:30+00:00"
+    "end": "2026-06-17T12:50:09+00:00"
   }
 }
