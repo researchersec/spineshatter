@@ -1,6 +1,6 @@
 {
   "itemId": 24235,
-  "itemName": "Unknown Item",
+  "itemName": "Thorium Powder",
   "priceHistory": [
     {
       "date": "2026-01-15T13:56:28+00:00",
@@ -19257,11 +19257,27 @@
       "marketValue": 9996,
       "quantity": 0,
       "numAuctions": 0
+    },
+    {
+      "date": "2026-06-20T23:35:26+00:00",
+      "timestamp": 1781998526,
+      "minBuyout": 18900,
+      "marketValue": 18900,
+      "quantity": 3,
+      "numAuctions": 1
+    },
+    {
+      "date": "2026-06-21T02:04:14+00:00",
+      "timestamp": 1782007454,
+      "minBuyout": 18900,
+      "marketValue": 18900,
+      "quantity": 3,
+      "numAuctions": 1
     }
   ],
-  "dataPoints": 2407,
+  "dataPoints": 2409,
   "dateRange": {
     "start": "2026-01-15T13:56:28+00:00",
-    "end": "2026-05-21T10:35:44+00:00"
+    "end": "2026-06-21T02:04:14+00:00"
   }
 }
