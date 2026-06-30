@@ -24089,11 +24089,83 @@
       "marketValue": 22313,
       "quantity": 65,
       "numAuctions": 13
+    },
+    {
+      "date": "2026-06-29T11:29:42+00:00",
+      "timestamp": 1782732582,
+      "minBuyout": 26591,
+      "marketValue": 22676,
+      "quantity": 50,
+      "numAuctions": 6
+    },
+    {
+      "date": "2026-06-29T14:59:01+00:00",
+      "timestamp": 1782745141,
+      "minBuyout": 26589,
+      "marketValue": 22826,
+      "quantity": 17,
+      "numAuctions": 6
+    },
+    {
+      "date": "2026-06-29T17:42:20+00:00",
+      "timestamp": 1782754940,
+      "minBuyout": 26585,
+      "marketValue": 23035,
+      "quantity": 24,
+      "numAuctions": 10
+    },
+    {
+      "date": "2026-06-29T19:24:22+00:00",
+      "timestamp": 1782761062,
+      "minBuyout": 50000,
+      "marketValue": 23131,
+      "quantity": 11,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-29T21:06:06+00:00",
+      "timestamp": 1782767166,
+      "minBuyout": 49997,
+      "marketValue": 23182,
+      "quantity": 23,
+      "numAuctions": 5
+    },
+    {
+      "date": "2026-06-29T22:19:23+00:00",
+      "timestamp": 1782771563,
+      "minBuyout": 29997,
+      "marketValue": 23214,
+      "quantity": 60,
+      "numAuctions": 9
+    },
+    {
+      "date": "2026-06-29T23:32:23+00:00",
+      "timestamp": 1782775943,
+      "minBuyout": 29997,
+      "marketValue": 23254,
+      "quantity": 60,
+      "numAuctions": 9
+    },
+    {
+      "date": "2026-06-30T01:36:02+00:00",
+      "timestamp": 1782783362,
+      "minBuyout": 29995,
+      "marketValue": 23282,
+      "quantity": 54,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-06-30T05:54:39+00:00",
+      "timestamp": 1782798879,
+      "minBuyout": 29994,
+      "marketValue": 23640,
+      "quantity": 56,
+      "numAuctions": 9
     }
   ],
-  "dataPoints": 3011,
+  "dataPoints": 3020,
   "dateRange": {
     "start": "2026-01-01T01:23:56+00:00",
-    "end": "2026-06-29T06:22:14+00:00"
+    "end": "2026-06-30T05:54:39+00:00"
   }
 }

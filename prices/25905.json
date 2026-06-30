@@ -17977,11 +17977,83 @@
       "marketValue": 123868,
       "quantity": 1,
       "numAuctions": 1
+    },
+    {
+      "date": "2026-06-29T11:29:42+00:00",
+      "timestamp": 1782732582,
+      "minBuyout": 0,
+      "marketValue": 124526,
+      "quantity": 0,
+      "numAuctions": 0
+    },
+    {
+      "date": "2026-06-29T14:59:01+00:00",
+      "timestamp": 1782745141,
+      "minBuyout": 434700,
+      "marketValue": 129156,
+      "quantity": 2,
+      "numAuctions": 1
+    },
+    {
+      "date": "2026-06-29T17:42:20+00:00",
+      "timestamp": 1782754940,
+      "minBuyout": 430096,
+      "marketValue": 139035,
+      "quantity": 6,
+      "numAuctions": 5
+    },
+    {
+      "date": "2026-06-29T19:24:22+00:00",
+      "timestamp": 1782761062,
+      "minBuyout": 350092,
+      "marketValue": 143338,
+      "quantity": 9,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-06-29T21:06:06+00:00",
+      "timestamp": 1782767166,
+      "minBuyout": 350091,
+      "marketValue": 146298,
+      "quantity": 9,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-06-29T22:19:23+00:00",
+      "timestamp": 1782771563,
+      "minBuyout": 350092,
+      "marketValue": 147135,
+      "quantity": 8,
+      "numAuctions": 7
+    },
+    {
+      "date": "2026-06-29T23:32:23+00:00",
+      "timestamp": 1782775943,
+      "minBuyout": 340090,
+      "marketValue": 148408,
+      "quantity": 10,
+      "numAuctions": 9
+    },
+    {
+      "date": "2026-06-30T01:36:02+00:00",
+      "timestamp": 1782783362,
+      "minBuyout": 325499,
+      "marketValue": 148759,
+      "quantity": 12,
+      "numAuctions": 11
+    },
+    {
+      "date": "2026-06-30T05:54:39+00:00",
+      "timestamp": 1782798879,
+      "minBuyout": 325498,
+      "marketValue": 162595,
+      "quantity": 10,
+      "numAuctions": 10
     }
   ],
-  "dataPoints": 2247,
+  "dataPoints": 2256,
   "dateRange": {
     "start": "2026-02-06T21:35:50+00:00",
-    "end": "2026-06-29T06:22:14+00:00"
+    "end": "2026-06-30T05:54:39+00:00"
   }
 }

@@ -24089,11 +24089,83 @@
       "marketValue": 52653,
       "quantity": 67,
       "numAuctions": 12
+    },
+    {
+      "date": "2026-06-29T11:29:42+00:00",
+      "timestamp": 1782732582,
+      "minBuyout": 26657,
+      "marketValue": 52156,
+      "quantity": 62,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-06-29T14:59:01+00:00",
+      "timestamp": 1782745141,
+      "minBuyout": 226661,
+      "marketValue": 51718,
+      "quantity": 42,
+      "numAuctions": 3
+    },
+    {
+      "date": "2026-06-29T17:42:20+00:00",
+      "timestamp": 1782754940,
+      "minBuyout": 49998,
+      "marketValue": 52160,
+      "quantity": 61,
+      "numAuctions": 6
+    },
+    {
+      "date": "2026-06-29T19:24:22+00:00",
+      "timestamp": 1782761062,
+      "minBuyout": 49997,
+      "marketValue": 52148,
+      "quantity": 62,
+      "numAuctions": 7
+    },
+    {
+      "date": "2026-06-29T21:06:06+00:00",
+      "timestamp": 1782767166,
+      "minBuyout": 49996,
+      "marketValue": 52014,
+      "quantity": 68,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-06-29T22:19:23+00:00",
+      "timestamp": 1782771563,
+      "minBuyout": 47499,
+      "marketValue": 51937,
+      "quantity": 71,
+      "numAuctions": 10
+    },
+    {
+      "date": "2026-06-29T23:32:23+00:00",
+      "timestamp": 1782775943,
+      "minBuyout": 47499,
+      "marketValue": 51981,
+      "quantity": 71,
+      "numAuctions": 10
+    },
+    {
+      "date": "2026-06-30T01:36:02+00:00",
+      "timestamp": 1782783362,
+      "minBuyout": 47497,
+      "marketValue": 51956,
+      "quantity": 73,
+      "numAuctions": 12
+    },
+    {
+      "date": "2026-06-30T05:54:39+00:00",
+      "timestamp": 1782798879,
+      "minBuyout": 47499,
+      "marketValue": 51962,
+      "quantity": 67,
+      "numAuctions": 8
     }
   ],
-  "dataPoints": 3011,
+  "dataPoints": 3020,
   "dateRange": {
     "start": "2026-01-01T01:23:56+00:00",
-    "end": "2026-06-29T06:22:14+00:00"
+    "end": "2026-06-30T05:54:39+00:00"
   }
 }

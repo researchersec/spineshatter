@@ -22305,11 +22305,83 @@
       "marketValue": 15900,
       "quantity": 7,
       "numAuctions": 3
+    },
+    {
+      "date": "2026-06-29T11:29:42+00:00",
+      "timestamp": 1782732582,
+      "minBuyout": 49980,
+      "marketValue": 15550,
+      "quantity": 9,
+      "numAuctions": 5
+    },
+    {
+      "date": "2026-06-29T14:59:01+00:00",
+      "timestamp": 1782745141,
+      "minBuyout": 47800,
+      "marketValue": 15350,
+      "quantity": 9,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-06-29T17:42:20+00:00",
+      "timestamp": 1782754940,
+      "minBuyout": 47799,
+      "marketValue": 25825,
+      "quantity": 11,
+      "numAuctions": 9
+    },
+    {
+      "date": "2026-06-29T19:24:22+00:00",
+      "timestamp": 1782761062,
+      "minBuyout": 47798,
+      "marketValue": 26746,
+      "quantity": 12,
+      "numAuctions": 10
+    },
+    {
+      "date": "2026-06-29T21:06:06+00:00",
+      "timestamp": 1782767166,
+      "minBuyout": 47795,
+      "marketValue": 22595,
+      "quantity": 27,
+      "numAuctions": 12
+    },
+    {
+      "date": "2026-06-29T22:19:23+00:00",
+      "timestamp": 1782771563,
+      "minBuyout": 39900,
+      "marketValue": 22516,
+      "quantity": 28,
+      "numAuctions": 12
+    },
+    {
+      "date": "2026-06-29T23:32:23+00:00",
+      "timestamp": 1782775943,
+      "minBuyout": 39900,
+      "marketValue": 22468,
+      "quantity": 28,
+      "numAuctions": 12
+    },
+    {
+      "date": "2026-06-30T01:36:02+00:00",
+      "timestamp": 1782783362,
+      "minBuyout": 39899,
+      "marketValue": 22423,
+      "quantity": 33,
+      "numAuctions": 14
+    },
+    {
+      "date": "2026-06-30T05:54:39+00:00",
+      "timestamp": 1782798879,
+      "minBuyout": 39897,
+      "marketValue": 26430,
+      "quantity": 33,
+      "numAuctions": 15
     }
   ],
-  "dataPoints": 2788,
+  "dataPoints": 2797,
   "dateRange": {
     "start": "2026-01-14T12:36:00+00:00",
-    "end": "2026-06-29T06:22:14+00:00"
+    "end": "2026-06-30T05:54:39+00:00"
   }
 }

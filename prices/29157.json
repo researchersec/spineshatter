@@ -22289,11 +22289,83 @@
       "marketValue": 111618,
       "quantity": 31,
       "numAuctions": 10
+    },
+    {
+      "date": "2026-06-29T11:29:42+00:00",
+      "timestamp": 1782732582,
+      "minBuyout": 89499,
+      "marketValue": 110304,
+      "quantity": 7,
+      "numAuctions": 4
+    },
+    {
+      "date": "2026-06-29T14:59:01+00:00",
+      "timestamp": 1782745141,
+      "minBuyout": 69999,
+      "marketValue": 110409,
+      "quantity": 23,
+      "numAuctions": 4
+    },
+    {
+      "date": "2026-06-29T17:42:20+00:00",
+      "timestamp": 1782754940,
+      "minBuyout": 64098,
+      "marketValue": 110533,
+      "quantity": 22,
+      "numAuctions": 5
+    },
+    {
+      "date": "2026-06-29T19:24:22+00:00",
+      "timestamp": 1782761062,
+      "minBuyout": 64097,
+      "marketValue": 110147,
+      "quantity": 22,
+      "numAuctions": 5
+    },
+    {
+      "date": "2026-06-29T21:06:06+00:00",
+      "timestamp": 1782767166,
+      "minBuyout": 64095,
+      "marketValue": 109255,
+      "quantity": 22,
+      "numAuctions": 6
+    },
+    {
+      "date": "2026-06-29T22:19:23+00:00",
+      "timestamp": 1782771563,
+      "minBuyout": 64093,
+      "marketValue": 108144,
+      "quantity": 25,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-06-29T23:32:23+00:00",
+      "timestamp": 1782775943,
+      "minBuyout": 64093,
+      "marketValue": 107704,
+      "quantity": 25,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-06-30T01:36:02+00:00",
+      "timestamp": 1782783362,
+      "minBuyout": 64095,
+      "marketValue": 107164,
+      "quantity": 22,
+      "numAuctions": 6
+    },
+    {
+      "date": "2026-06-30T05:54:39+00:00",
+      "timestamp": 1782798879,
+      "minBuyout": 64093,
+      "marketValue": 102328,
+      "quantity": 25,
+      "numAuctions": 6
     }
   ],
-  "dataPoints": 2786,
+  "dataPoints": 2795,
   "dateRange": {
     "start": "2026-01-14T18:30:16+00:00",
-    "end": "2026-06-29T06:22:14+00:00"
+    "end": "2026-06-30T05:54:39+00:00"
   }
 }

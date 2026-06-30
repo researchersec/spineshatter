@@ -18041,11 +18041,83 @@
       "marketValue": 63462,
       "quantity": 0,
       "numAuctions": 0
+    },
+    {
+      "date": "2026-06-29T11:29:42+00:00",
+      "timestamp": 1782732582,
+      "minBuyout": 0,
+      "marketValue": 63011,
+      "quantity": 0,
+      "numAuctions": 0
+    },
+    {
+      "date": "2026-06-29T14:59:01+00:00",
+      "timestamp": 1782745141,
+      "minBuyout": 60000,
+      "marketValue": 62710,
+      "quantity": 5,
+      "numAuctions": 1
+    },
+    {
+      "date": "2026-06-29T17:42:20+00:00",
+      "timestamp": 1782754940,
+      "minBuyout": 58000,
+      "marketValue": 62267,
+      "quantity": 10,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-29T19:24:22+00:00",
+      "timestamp": 1782761062,
+      "minBuyout": 58000,
+      "marketValue": 62319,
+      "quantity": 10,
+      "numAuctions": 2
+    },
+    {
+      "date": "2026-06-29T21:06:06+00:00",
+      "timestamp": 1782767166,
+      "minBuyout": 57999,
+      "marketValue": 62398,
+      "quantity": 20,
+      "numAuctions": 3
+    },
+    {
+      "date": "2026-06-29T22:19:23+00:00",
+      "timestamp": 1782771563,
+      "minBuyout": 52098,
+      "marketValue": 62297,
+      "quantity": 31,
+      "numAuctions": 4
+    },
+    {
+      "date": "2026-06-29T23:32:23+00:00",
+      "timestamp": 1782775943,
+      "minBuyout": 52098,
+      "marketValue": 62237,
+      "quantity": 31,
+      "numAuctions": 4
+    },
+    {
+      "date": "2026-06-30T01:36:02+00:00",
+      "timestamp": 1782783362,
+      "minBuyout": 52098,
+      "marketValue": 62199,
+      "quantity": 31,
+      "numAuctions": 4
+    },
+    {
+      "date": "2026-06-30T05:54:39+00:00",
+      "timestamp": 1782798879,
+      "minBuyout": 52098,
+      "marketValue": 61633,
+      "quantity": 31,
+      "numAuctions": 4
     }
   ],
-  "dataPoints": 2255,
+  "dataPoints": 2264,
   "dateRange": {
     "start": "2026-02-06T13:33:54+00:00",
-    "end": "2026-06-29T06:22:14+00:00"
+    "end": "2026-06-30T05:54:39+00:00"
   }
 }
