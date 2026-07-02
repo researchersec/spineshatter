@@ -24241,11 +24241,91 @@
       "marketValue": 134,
       "quantity": 101,
       "numAuctions": 11
+    },
+    {
+      "date": "2026-07-01T08:54:52+00:00",
+      "timestamp": 1782896092,
+      "minBuyout": 38,
+      "marketValue": 123,
+      "quantity": 101,
+      "numAuctions": 11
+    },
+    {
+      "date": "2026-07-01T11:55:36+00:00",
+      "timestamp": 1782906936,
+      "minBuyout": 34,
+      "marketValue": 146,
+      "quantity": 129,
+      "numAuctions": 16
+    },
+    {
+      "date": "2026-07-01T14:25:25+00:00",
+      "timestamp": 1782915925,
+      "minBuyout": 33,
+      "marketValue": 141,
+      "quantity": 134,
+      "numAuctions": 17
+    },
+    {
+      "date": "2026-07-01T16:43:02+00:00",
+      "timestamp": 1782924182,
+      "minBuyout": 31,
+      "marketValue": 136,
+      "quantity": 193,
+      "numAuctions": 17
+    },
+    {
+      "date": "2026-07-01T18:31:05+00:00",
+      "timestamp": 1782930665,
+      "minBuyout": 40,
+      "marketValue": 131,
+      "quantity": 12,
+      "numAuctions": 5
+    },
+    {
+      "date": "2026-07-01T20:28:44+00:00",
+      "timestamp": 1782937724,
+      "minBuyout": 25,
+      "marketValue": 128,
+      "quantity": 66,
+      "numAuctions": 21
+    },
+    {
+      "date": "2026-07-01T22:03:29+00:00",
+      "timestamp": 1782943409,
+      "minBuyout": 32,
+      "marketValue": 124,
+      "quantity": 97,
+      "numAuctions": 12
+    },
+    {
+      "date": "2026-07-01T23:41:50+00:00",
+      "timestamp": 1782949310,
+      "minBuyout": 32,
+      "marketValue": 123,
+      "quantity": 94,
+      "numAuctions": 12
+    },
+    {
+      "date": "2026-07-02T01:49:19+00:00",
+      "timestamp": 1782956959,
+      "minBuyout": 31,
+      "marketValue": 120,
+      "quantity": 98,
+      "numAuctions": 10
+    },
+    {
+      "date": "2026-07-02T05:53:56+00:00",
+      "timestamp": 1782971636,
+      "minBuyout": 32,
+      "marketValue": 112,
+      "quantity": 97,
+      "numAuctions": 8
     }
   ],
-  "dataPoints": 3030,
+  "dataPoints": 3040,
   "dateRange": {
     "start": "2026-01-01T01:23:56+00:00",
-    "end": "2026-07-01T05:03:04+00:00"
+    "end": "2026-07-02T05:53:56+00:00"
   }
 }
