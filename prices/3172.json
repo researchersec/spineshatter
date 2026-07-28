@@ -26825,11 +26825,91 @@
       "marketValue": 36,
       "quantity": 11,
       "numAuctions": 4
+    },
+    {
+      "date": "2026-07-27T08:46:01+00:00",
+      "timestamp": 1785141961,
+      "minBuyout": 13,
+      "marketValue": 34,
+      "quantity": 11,
+      "numAuctions": 4
+    },
+    {
+      "date": "2026-07-27T12:15:42+00:00",
+      "timestamp": 1785154542,
+      "minBuyout": 10011,
+      "marketValue": 42,
+      "quantity": 86,
+      "numAuctions": 8
+    },
+    {
+      "date": "2026-07-27T15:21:27+00:00",
+      "timestamp": 1785165687,
+      "minBuyout": 539,
+      "marketValue": 42,
+      "quantity": 112,
+      "numAuctions": 15
+    },
+    {
+      "date": "2026-07-27T17:15:48+00:00",
+      "timestamp": 1785172548,
+      "minBuyout": 534,
+      "marketValue": 54,
+      "quantity": 136,
+      "numAuctions": 21
+    },
+    {
+      "date": "2026-07-27T18:53:41+00:00",
+      "timestamp": 1785178421,
+      "minBuyout": 529,
+      "marketValue": 66,
+      "quantity": 156,
+      "numAuctions": 26
+    },
+    {
+      "date": "2026-07-27T20:17:33+00:00",
+      "timestamp": 1785183453,
+      "minBuyout": 499,
+      "marketValue": 72,
+      "quantity": 159,
+      "numAuctions": 28
+    },
+    {
+      "date": "2026-07-27T21:36:08+00:00",
+      "timestamp": 1785188168,
+      "minBuyout": 200,
+      "marketValue": 78,
+      "quantity": 199,
+      "numAuctions": 32
+    },
+    {
+      "date": "2026-07-27T22:40:20+00:00",
+      "timestamp": 1785192020,
+      "minBuyout": 196,
+      "marketValue": 87,
+      "quantity": 213,
+      "numAuctions": 36
+    },
+    {
+      "date": "2026-07-27T23:43:33+00:00",
+      "timestamp": 1785195813,
+      "minBuyout": 193,
+      "marketValue": 91,
+      "quantity": 218,
+      "numAuctions": 38
+    },
+    {
+      "date": "2026-07-28T04:26:01+00:00",
+      "timestamp": 1785212761,
+      "minBuyout": 189,
+      "marketValue": 104,
+      "quantity": 235,
+      "numAuctions": 41
     }
   ],
-  "dataPoints": 3353,
+  "dataPoints": 3363,
   "dateRange": {
     "start": "2026-01-01T01:23:56+00:00",
-    "end": "2026-07-27T05:06:09+00:00"
+    "end": "2026-07-28T04:26:01+00:00"
   }
 }
