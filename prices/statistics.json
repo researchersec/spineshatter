@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-08-03T05:49:29.598275+00:00",
+  "generatedAt": "2026-08-04T05:10:54.925308+00:00",
   "marketSummary": {
     "totalItems": 9305,
-    "totalMarketValue": 8762099156,
-    "averagePrice": 941654.9334766255,
-    "totalQuantityTraded": 3931283326,
-    "totalAuctions": 305425215
+    "totalMarketValue": 8552006710,
+    "averagePrice": 919076.4868350349,
+    "totalQuantityTraded": 3941041534,
+    "totalAuctions": 306111509
   },
   "topExpensive": [
     {
@@ -14,10 +14,21 @@
       "currentPrice": 2000000000,
       "earliestPrice": 11202,
       "priceChangePct": 17853854.65095519,
-      "volatility": 518320964.41556907,
-      "totalQuantity": 1267,
-      "totalAuctions": 1211,
-      "dataPoints": 2487
+      "volatility": 529205456.99963987,
+      "totalQuantity": 1276,
+      "totalAuctions": 1220,
+      "dataPoints": 2496
+    },
+    {
+      "itemId": 14976,
+      "itemName": "Exalted Gauntlets",
+      "currentPrice": 438456773,
+      "earliestPrice": 45705,
+      "priceChangePct": 959219.0526200635,
+      "volatility": 34695811.387695625,
+      "totalQuantity": 3326,
+      "totalAuctions": 3270,
+      "dataPoints": 3069
     },
     {
       "itemId": 779,
@@ -31,81 +42,48 @@
       "dataPoints": 1428
     },
     {
-      "itemId": 1395,
-      "itemName": "Apprentice's Pants",
-      "currentPrice": 227935648,
-      "earliestPrice": 999995,
-      "priceChangePct": 22693.678768393842,
-      "volatility": 73637217.42696385,
-      "totalQuantity": 871,
-      "totalAuctions": 784,
-      "dataPoints": 2803
-    },
-    {
-      "itemId": 14976,
-      "itemName": "Exalted Gauntlets",
-      "currentPrice": 222703728,
-      "earliestPrice": 45705,
-      "priceChangePct": 487163.38037413853,
-      "volatility": 27894446.087155834,
-      "totalQuantity": 3320,
-      "totalAuctions": 3264,
-      "dataPoints": 3060
-    },
-    {
-      "itemId": 23320,
-      "itemName": "Tablet of Flame Shock VI",
-      "currentPrice": 221852102,
-      "earliestPrice": 394169,
-      "priceChangePct": 56183.49819493669,
-      "volatility": 79212777.48831171,
-      "totalQuantity": 8053,
-      "totalAuctions": 7882,
-      "dataPoints": 3440
-    },
-    {
       "itemId": 9425,
       "itemName": "Pendulum of Doom",
-      "currentPrice": 92750807,
+      "currentPrice": 94121386,
       "earliestPrice": 29799143,
-      "priceChangePct": 211.25326993464205,
-      "volatility": 26349007.324745614,
-      "totalQuantity": 9381,
-      "totalAuctions": 9068,
-      "dataPoints": 3440
-    },
-    {
-      "itemId": 34837,
-      "itemName": "The 2 Ring",
-      "currentPrice": 85279132,
-      "earliestPrice": 30000000,
-      "priceChangePct": 184.26377333333332,
-      "volatility": 14146446.281687947,
-      "totalQuantity": 5775,
-      "totalAuctions": 5762,
-      "dataPoints": 2487
+      "priceChangePct": 215.85266059497079,
+      "volatility": 26479898.284512397,
+      "totalQuantity": 9392,
+      "totalAuctions": 9079,
+      "dataPoints": 3449
     },
     {
       "itemId": 9484,
       "itemName": "Spellshock Leggings",
-      "currentPrice": 81999007,
+      "currentPrice": 81584821,
       "earliestPrice": 330365774,
-      "priceChangePct": -75.1793274444949,
-      "volatility": 139851248.30697653,
-      "totalQuantity": 2843,
-      "totalAuctions": 2842,
-      "dataPoints": 3440
+      "priceChangePct": -75.30469939056096,
+      "volatility": 139845446.16462266,
+      "totalQuantity": 2852,
+      "totalAuctions": 2851,
+      "dataPoints": 3449
     },
     {
       "itemId": 20698,
       "itemName": "Elemental Attuned Blade",
-      "currentPrice": 80000428,
+      "currentPrice": 80000315,
       "earliestPrice": 55840172,
-      "priceChangePct": 43.26680082575677,
-      "volatility": 16768114.615046473,
-      "totalQuantity": 8631,
-      "totalAuctions": 8616,
-      "dataPoints": 3440
+      "priceChangePct": 43.266598462483245,
+      "volatility": 16933147.745920774,
+      "totalQuantity": 8646,
+      "totalAuctions": 8631,
+      "dataPoints": 3449
+    },
+    {
+      "itemId": 34837,
+      "itemName": "The 2 Ring",
+      "currentPrice": 78644360,
+      "earliestPrice": 30000000,
+      "priceChangePct": 162.1478666666667,
+      "volatility": 14172984.862443583,
+      "totalQuantity": 5807,
+      "totalAuctions": 5794,
+      "dataPoints": 2496
     },
     {
       "itemId": 19028,
@@ -117,6 +95,28 @@
       "totalQuantity": 433,
       "totalAuctions": 433,
       "dataPoints": 1018
+    },
+    {
+      "itemId": 21738,
+      "itemName": "Schematic: Firework Launcher",
+      "currentPrice": 67859022,
+      "earliestPrice": 5681606,
+      "priceChangePct": 1094.3633895064177,
+      "volatility": 16209451.600794425,
+      "totalQuantity": 3610,
+      "totalAuctions": 3327,
+      "dataPoints": 3432
+    },
+    {
+      "itemId": 20894,
+      "itemName": "Apprentice's Pants",
+      "currentPrice": 60040000,
+      "earliestPrice": 299,
+      "priceChangePct": 20080167.558528427,
+      "volatility": 14213072.502207017,
+      "totalQuantity": 87,
+      "totalAuctions": 87,
+      "dataPoints": 704
     }
   ],
   "topGainers": [
@@ -126,10 +126,10 @@
       "currentPrice": 60040000,
       "earliestPrice": 299,
       "priceChangePct": 20080167.558528427,
-      "volatility": 12853504.038054615,
+      "volatility": 14213072.502207017,
       "totalQuantity": 87,
       "totalAuctions": 87,
-      "dataPoints": 695
+      "dataPoints": 704
     },
     {
       "itemId": 3999,
@@ -137,10 +137,10 @@
       "currentPrice": 2000000000,
       "earliestPrice": 11202,
       "priceChangePct": 17853854.65095519,
-      "volatility": 518320964.41556907,
-      "totalQuantity": 1267,
-      "totalAuctions": 1211,
-      "dataPoints": 2487
+      "volatility": 529205456.99963987,
+      "totalQuantity": 1276,
+      "totalAuctions": 1220,
+      "dataPoints": 2496
     },
     {
       "itemId": 779,
@@ -159,10 +159,10 @@
       "currentPrice": 20000000,
       "earliestPrice": 499,
       "priceChangePct": 4007916.032064128,
-      "volatility": 4240388.947065343,
+      "volatility": 4476723.733871888,
       "totalQuantity": 504,
       "totalAuctions": 504,
-      "dataPoints": 1382
+      "dataPoints": 1391
     },
     {
       "itemId": 3137,
@@ -181,21 +181,21 @@
       "currentPrice": 21000000,
       "earliestPrice": 1894,
       "priceChangePct": 1108664.5195353748,
-      "volatility": 26700253.331416957,
-      "totalQuantity": 256637,
-      "totalAuctions": 7556,
-      "dataPoints": 3023
+      "volatility": 26671954.416225936,
+      "totalQuantity": 256857,
+      "totalAuctions": 7567,
+      "dataPoints": 3032
     },
     {
-      "itemId": 15962,
-      "itemName": "Satyr's Rod",
-      "currentPrice": 32621385,
-      "earliestPrice": 5346,
-      "priceChangePct": 610101.7396184063,
-      "volatility": 3125089.061025765,
-      "totalQuantity": 6987,
-      "totalAuctions": 6975,
-      "dataPoints": 3440
+      "itemId": 14976,
+      "itemName": "Exalted Gauntlets",
+      "currentPrice": 438456773,
+      "earliestPrice": 45705,
+      "priceChangePct": 959219.0526200635,
+      "volatility": 34695811.387695625,
+      "totalQuantity": 3326,
+      "totalAuctions": 3270,
+      "dataPoints": 3069
     },
     {
       "itemId": 237,
@@ -209,26 +209,26 @@
       "dataPoints": 962
     },
     {
-      "itemId": 14976,
-      "itemName": "Exalted Gauntlets",
-      "currentPrice": 222703728,
-      "earliestPrice": 45705,
-      "priceChangePct": 487163.38037413853,
-      "volatility": 27894446.087155834,
-      "totalQuantity": 3320,
-      "totalAuctions": 3264,
-      "dataPoints": 3060
+      "itemId": 15962,
+      "itemName": "Satyr's Rod",
+      "currentPrice": 25383201,
+      "earliestPrice": 5346,
+      "priceChangePct": 474707.3512906846,
+      "volatility": 3460805.574224427,
+      "totalQuantity": 7004,
+      "totalAuctions": 6992,
+      "dataPoints": 3449
     },
     {
-      "itemId": 6305,
-      "itemName": "Damp Diary Page (Day 87)",
-      "currentPrice": 10000,
-      "earliestPrice": 3,
-      "priceChangePct": 333233.3333333334,
-      "volatility": 3977.5628770647195,
-      "totalQuantity": 5,
-      "totalAuctions": 5,
-      "dataPoints": 357
+      "itemId": 15313,
+      "itemName": "Feral Shoulder Pads",
+      "currentPrice": 26299909,
+      "earliestPrice": 5865,
+      "priceChangePct": 448321.2958226769,
+      "volatility": 3330601.6062398176,
+      "totalQuantity": 18012,
+      "totalAuctions": 16487,
+      "dataPoints": 3449
     }
   ],
   "topLosers": [
@@ -260,10 +260,21 @@
       "currentPrice": 1100,
       "earliestPrice": 10000000,
       "priceChangePct": -99.98899999999999,
-      "volatility": 1714071.8045365463,
+      "volatility": 1711761.410672129,
       "totalQuantity": 8825,
       "totalAuctions": 3196,
-      "dataPoints": 2960
+      "dataPoints": 2969
+    },
+    {
+      "itemId": 4877,
+      "itemName": "Stone Arrowhead",
+      "currentPrice": 379,
+      "earliestPrice": 2621931,
+      "priceChangePct": -99.98554500480753,
+      "volatility": 279558.04300713964,
+      "totalQuantity": 2006,
+      "totalAuctions": 1290,
+      "dataPoints": 3162
     },
     {
       "itemId": 7943,
@@ -279,13 +290,13 @@
     {
       "itemId": 27978,
       "itemName": "Soap on a Rope",
-      "currentPrice": 191744,
+      "currentPrice": 200406,
       "earliestPrice": 1100000000,
-      "priceChangePct": -99.98256872727272,
-      "volatility": 132553952.3144145,
-      "totalQuantity": 5367,
-      "totalAuctions": 3257,
-      "dataPoints": 2638
+      "priceChangePct": -99.98178127272728,
+      "volatility": 132333771.21602757,
+      "totalQuantity": 5373,
+      "totalAuctions": 3263,
+      "dataPoints": 2647
     },
     {
       "itemId": 6137,
@@ -297,17 +308,6 @@
       "totalQuantity": 43,
       "totalAuctions": 43,
       "dataPoints": 511
-    },
-    {
-      "itemId": 27855,
-      "itemName": "Mag'har Grainbread",
-      "currentPrice": 779,
-      "earliestPrice": 3450000,
-      "priceChangePct": -99.97742028985506,
-      "volatility": 243265.9374704917,
-      "totalQuantity": 331275,
-      "totalAuctions": 58947,
-      "dataPoints": 3077
     },
     {
       "itemId": 4879,
@@ -323,24 +323,24 @@
     {
       "itemId": 30458,
       "itemName": "Stromgarde Muenster",
-      "currentPrice": 884,
+      "currentPrice": 854,
       "earliestPrice": 1000000,
-      "priceChangePct": -99.9116,
-      "volatility": 131370.7721926918,
-      "totalQuantity": 99028,
-      "totalAuctions": 20783,
-      "dataPoints": 2861
+      "priceChangePct": -99.9146,
+      "volatility": 131171.06158507615,
+      "totalQuantity": 99895,
+      "totalAuctions": 20857,
+      "dataPoints": 2870
     },
     {
-      "itemId": 4877,
-      "itemName": "Stone Arrowhead",
-      "currentPrice": 2395,
-      "earliestPrice": 2621931,
-      "priceChangePct": -99.90865510953569,
-      "volatility": 279941.06480014935,
-      "totalQuantity": 1984,
-      "totalAuctions": 1275,
-      "dataPoints": 3153
+      "itemId": 1813,
+      "itemName": "Chipped Quarterstaff",
+      "currentPrice": 990,
+      "earliestPrice": 1056859,
+      "priceChangePct": -99.90632619866983,
+      "volatility": 81288.6864424599,
+      "totalQuantity": 9637,
+      "totalAuctions": 8674,
+      "dataPoints": 3449
     }
   ],
   "mostVolatile": [
@@ -350,10 +350,10 @@
       "currentPrice": 2000000000,
       "earliestPrice": 11202,
       "priceChangePct": 17853854.65095519,
-      "volatility": 518320964.41556907,
-      "totalQuantity": 1267,
-      "totalAuctions": 1211,
-      "dataPoints": 2487
+      "volatility": 529205456.99963987,
+      "totalQuantity": 1276,
+      "totalAuctions": 1220,
+      "dataPoints": 2496
     },
     {
       "itemId": 7307,
@@ -380,13 +380,13 @@
     {
       "itemId": 25679,
       "itemName": "Comfortable Insoles",
-      "currentPrice": 91416,
+      "currentPrice": 25554,
       "earliestPrice": 550000,
-      "priceChangePct": -83.37890909090909,
-      "volatility": 238412155.4350037,
+      "priceChangePct": -95.35381818181818,
+      "volatility": 237926569.1933559,
       "totalQuantity": 1016,
       "totalAuctions": 615,
-      "dataPoints": 1579
+      "dataPoints": 1588
     },
     {
       "itemId": 779,
@@ -402,13 +402,13 @@
     {
       "itemId": 9484,
       "itemName": "Spellshock Leggings",
-      "currentPrice": 81999007,
+      "currentPrice": 81584821,
       "earliestPrice": 330365774,
-      "priceChangePct": -75.1793274444949,
-      "volatility": 139851248.30697653,
-      "totalQuantity": 2843,
-      "totalAuctions": 2842,
-      "dataPoints": 3440
+      "priceChangePct": -75.30469939056096,
+      "volatility": 139845446.16462266,
+      "totalQuantity": 2852,
+      "totalAuctions": 2851,
+      "dataPoints": 3449
     },
     {
       "itemId": 771,
@@ -416,155 +416,155 @@
       "currentPrice": 250,
       "earliestPrice": 218,
       "priceChangePct": 14.678899082568808,
-      "volatility": 134354892.3027695,
+      "volatility": 134099911.95434491,
       "totalQuantity": 2392,
       "totalAuctions": 665,
-      "dataPoints": 2185
+      "dataPoints": 2194
     },
     {
       "itemId": 27978,
       "itemName": "Soap on a Rope",
-      "currentPrice": 191744,
+      "currentPrice": 200406,
       "earliestPrice": 1100000000,
-      "priceChangePct": -99.98256872727272,
-      "volatility": 132553952.3144145,
-      "totalQuantity": 5367,
-      "totalAuctions": 3257,
-      "dataPoints": 2638
+      "priceChangePct": -99.98178127272728,
+      "volatility": 132333771.21602757,
+      "totalQuantity": 5373,
+      "totalAuctions": 3263,
+      "dataPoints": 2647
     },
     {
       "itemId": 13817,
       "itemName": "Tapered Greatsword",
-      "currentPrice": 39656,
+      "currentPrice": 36514,
       "earliestPrice": 38132,
-      "priceChangePct": 3.9966432392741003,
-      "volatility": 89379456.99978249,
-      "totalQuantity": 6571,
-      "totalAuctions": 5447,
-      "dataPoints": 3440
+      "priceChangePct": -4.2431553550823455,
+      "volatility": 89265108.30317256,
+      "totalQuantity": 6583,
+      "totalAuctions": 5459,
+      "dataPoints": 3449
     },
     {
       "itemId": 1728,
       "itemName": "Teebu's Blazing Longsword",
-      "currentPrice": 17658641,
+      "currentPrice": 17611233,
       "earliestPrice": 443339993,
-      "priceChangePct": -96.0169077279703,
-      "volatility": 86780787.75973932,
-      "totalQuantity": 14748,
-      "totalAuctions": 13290,
-      "dataPoints": 3440
+      "priceChangePct": -96.02760110117113,
+      "volatility": 86677159.41298349,
+      "totalQuantity": 14781,
+      "totalAuctions": 13323,
+      "dataPoints": 3449
     }
   ],
   "mostTraded": [
     {
       "itemId": 33803,
       "itemName": "Adamantite Stinger",
-      "currentPrice": 104,
+      "currentPrice": 105,
       "earliestPrice": 138,
-      "priceChangePct": -24.637681159420293,
-      "volatility": 13.64795743181009,
-      "totalQuantity": 98650608,
-      "totalAuctions": 12140,
-      "dataPoints": 870
+      "priceChangePct": -23.91304347826087,
+      "volatility": 13.578026783484688,
+      "totalQuantity": 99335090,
+      "totalAuctions": 12241,
+      "dataPoints": 879
     },
     {
       "itemId": 15997,
       "itemName": "Thorium Shells",
-      "currentPrice": 67,
+      "currentPrice": 65,
       "earliestPrice": 133,
-      "priceChangePct": -49.62406015037594,
-      "volatility": 42.00715243596963,
-      "totalQuantity": 90414592,
-      "totalAuctions": 50113,
-      "dataPoints": 3440
+      "priceChangePct": -51.127819548872175,
+      "volatility": 41.96824824616937,
+      "totalQuantity": 90995798,
+      "totalAuctions": 50409,
+      "dataPoints": 3449
     },
     {
       "itemId": 21877,
       "itemName": "Netherweave Cloth",
-      "currentPrice": 1500,
+      "currentPrice": 1501,
       "earliestPrice": 124500,
-      "priceChangePct": -98.79518072289156,
-      "volatility": 5766.01954529291,
-      "totalQuantity": 59747526,
-      "totalAuctions": 399557,
-      "dataPoints": 3217
-    },
-    {
-      "itemId": 30809,
-      "itemName": "Mark of Sargeras",
-      "currentPrice": 2989,
-      "earliestPrice": 250000,
-      "priceChangePct": -98.8044,
-      "volatility": 7543.765448404356,
-      "totalQuantity": 56538062,
-      "totalAuctions": 348515,
-      "dataPoints": 2676
+      "priceChangePct": -98.79437751004016,
+      "volatility": 5758.891264504434,
+      "totalQuantity": 59834324,
+      "totalAuctions": 400490,
+      "dataPoints": 3226
     },
     {
       "itemId": 22445,
       "itemName": "Arcane Dust",
-      "currentPrice": 9472,
+      "currentPrice": 9464,
       "earliestPrice": 88683,
-      "priceChangePct": -89.31926073768366,
-      "volatility": 2662.1598201892652,
-      "totalQuantity": 56457329,
-      "totalAuctions": 439435,
-      "dataPoints": 2694
+      "priceChangePct": -89.32828163233089,
+      "volatility": 2658.8376464795647,
+      "totalQuantity": 56679906,
+      "totalAuctions": 440474,
+      "dataPoints": 2703
+    },
+    {
+      "itemId": 30809,
+      "itemName": "Mark of Sargeras",
+      "currentPrice": 3031,
+      "earliestPrice": 250000,
+      "priceChangePct": -98.7876,
+      "volatility": 7534.236310943044,
+      "totalQuantity": 56634186,
+      "totalAuctions": 349766,
+      "dataPoints": 2685
     },
     {
       "itemId": 14047,
       "itemName": "Runecloth",
-      "currentPrice": 532,
+      "currentPrice": 529,
       "earliestPrice": 597,
-      "priceChangePct": -10.887772194304858,
-      "volatility": 101.35237919292956,
-      "totalQuantity": 54458983,
-      "totalAuctions": 419070,
-      "dataPoints": 3440
+      "priceChangePct": -11.390284757118927,
+      "volatility": 101.38875407544137,
+      "totalQuantity": 54564737,
+      "totalAuctions": 419688,
+      "dataPoints": 3449
     },
     {
       "itemId": 18042,
       "itemName": "Thorium Headed Arrow",
-      "currentPrice": 129,
+      "currentPrice": 144,
       "earliestPrice": 154,
-      "priceChangePct": -16.233766233766232,
-      "volatility": 639.6085276036156,
-      "totalQuantity": 53999591,
-      "totalAuctions": 23206,
-      "dataPoints": 3440
+      "priceChangePct": -6.493506493506493,
+      "volatility": 638.8709122434083,
+      "totalQuantity": 54041381,
+      "totalAuctions": 23251,
+      "dataPoints": 3449
     },
     {
       "itemId": 10512,
       "itemName": "Hi-Impact Mithril Slugs",
-      "currentPrice": 54,
+      "currentPrice": 57,
       "earliestPrice": 41,
-      "priceChangePct": 31.70731707317073,
-      "volatility": 41.95539086344583,
-      "totalQuantity": 45576453,
-      "totalAuctions": 25398,
-      "dataPoints": 3440
+      "priceChangePct": 39.02439024390244,
+      "volatility": 41.91661711153868,
+      "totalQuantity": 45666853,
+      "totalAuctions": 25459,
+      "dataPoints": 3449
     },
     {
       "itemId": 23772,
       "itemName": "Fel Iron Shells",
-      "currentPrice": 155,
+      "currentPrice": 133,
       "earliestPrice": 194,
-      "priceChangePct": -20.103092783505154,
-      "volatility": 55.78892805070205,
-      "totalQuantity": 42717887,
-      "totalAuctions": 30757,
-      "dataPoints": 2684
+      "priceChangePct": -31.443298969072163,
+      "volatility": 55.706866233385014,
+      "totalQuantity": 42810087,
+      "totalAuctions": 30826,
+      "dataPoints": 2693
     },
     {
       "itemId": 28053,
       "itemName": "Wicked Arrow",
-      "currentPrice": 87,
+      "currentPrice": 197,
       "earliestPrice": 48,
-      "priceChangePct": 81.25,
-      "volatility": 373.0244953357021,
-      "totalQuantity": 42236399,
-      "totalAuctions": 17401,
-      "dataPoints": 3216
+      "priceChangePct": 310.41666666666663,
+      "volatility": 372.5104380531339,
+      "totalQuantity": 42246999,
+      "totalAuctions": 17427,
+      "dataPoints": 3225
     }
   ],
   "recentTrends": {
@@ -572,9 +572,16 @@
       {
         "itemId": 13817,
         "itemName": "Tapered Greatsword",
-        "changePct": 434091.1110550736,
-        "startPrice": 39656,
-        "endPrice": 172182827
+        "changePct": 423673.76348797727,
+        "startPrice": 36514,
+        "endPrice": 154736752
+      },
+      {
+        "itemId": 23320,
+        "itemName": "Tablet of Flame Shock VI",
+        "changePct": 90986.21868244062,
+        "startPrice": 816874,
+        "endPrice": 744059638
       },
       {
         "itemId": 24186,
@@ -586,16 +593,16 @@
       {
         "itemId": 3964,
         "itemName": "Thick Cloak",
-        "changePct": 29545.139960326207,
-        "startPrice": 9074,
-        "endPrice": 2690000
+        "changePct": 21901.621349446123,
+        "startPrice": 9930,
+        "endPrice": 2184761
       },
       {
-        "itemId": 1800,
-        "itemName": "Rawhide Pants",
-        "changePct": 12850.0,
-        "startPrice": 2,
-        "endPrice": 259
+        "itemId": 3805,
+        "itemName": "Hardened Leather Pants",
+        "changePct": 14644.847438111688,
+        "startPrice": 8685,
+        "endPrice": 1280590
       },
       {
         "itemId": 9357,
@@ -612,82 +619,61 @@
         "endPrice": 10092
       },
       {
-        "itemId": 1936,
-        "itemName": "Goblin Screwdriver",
-        "changePct": 2894.5623031470445,
-        "startPrice": 115251,
-        "endPrice": 3451263
+        "itemId": 13824,
+        "itemName": "Recurve Long Bow",
+        "changePct": 4843.81211911939,
+        "startPrice": 107153,
+        "endPrice": 5297443
       },
       {
         "itemId": 1799,
         "itemName": "Rawhide Gloves",
-        "changePct": 2681.0810810810813,
+        "changePct": 2902.902902902903,
         "startPrice": 999,
-        "endPrice": 27783
+        "endPrice": 29999
       },
       {
-        "itemId": 4343,
-        "itemName": "Brown Linen Pants",
-        "changePct": 2372.0,
-        "startPrice": 100,
-        "endPrice": 2472
-      },
-      {
-        "itemId": 15768,
-        "itemName": "Pattern: Wicked Leather Belt",
-        "changePct": 2071.487357436787,
-        "startPrice": 199999,
-        "endPrice": 4342953
+        "itemId": 25431,
+        "itemName": "Ripped Fin",
+        "changePct": 2754.526764354067,
+        "startPrice": 26752,
+        "endPrice": 763643
       }
     ],
     "thirtyDay": [
       {
+        "itemId": 4867,
+        "itemName": "Broken Scorpid Leg",
+        "changePct": 756983.4710743801,
+        "startPrice": 121,
+        "endPrice": 916071
+      },
+      {
         "itemId": 3295,
         "itemName": "Deadman Blade",
-        "changePct": 687910.97,
+        "changePct": 718572.51,
         "startPrice": 20000,
-        "endPrice": 137602194
-      },
-      {
-        "itemId": 239,
-        "itemName": "Cured Leather Gloves",
-        "changePct": 666566.6666666667,
-        "startPrice": 1500,
-        "endPrice": 10000000
-      },
-      {
-        "itemId": 238,
-        "itemName": "Cured Leather Boots",
-        "changePct": 499900.0,
-        "startPrice": 5000,
-        "endPrice": 25000000
+        "endPrice": 143734502
       },
       {
         "itemId": 1800,
         "itemName": "Rawhide Pants",
-        "changePct": 493050.0,
+        "changePct": 440600.0,
         "startPrice": 2,
-        "endPrice": 9863
-      },
-      {
-        "itemId": 4867,
-        "itemName": "Broken Scorpid Leg",
-        "changePct": 480988.5,
-        "startPrice": 200,
-        "endPrice": 962177
+        "endPrice": 8814
       },
       {
         "itemId": 29571,
         "itemName": "A Steamy Romance Novel",
-        "changePct": 355927.09090909094,
+        "changePct": 266516.09090909094,
         "startPrice": 1100,
-        "endPrice": 3916298
+        "endPrice": 2932777
       },
       {
-        "itemId": 236,
-        "itemName": "Cured Leather Armor",
-        "changePct": 199900.0,
-        "startPrice": 5000,
+        "itemId": 1850,
+        "itemName": "Cured Leather Bracers",
+        "changePct": 206853.64238410597,
+        "startPrice": 4832,
         "endPrice": 10000000
       },
       {
@@ -696,6 +682,20 @@
         "changePct": 98867.77824093372,
         "startPrice": 2399,
         "endPrice": 2374237
+      },
+      {
+        "itemId": 1380,
+        "itemName": "Frayed Robe",
+        "changePct": 98387.5,
+        "startPrice": 80,
+        "endPrice": 78790
+      },
+      {
+        "itemId": 4604,
+        "itemName": "Forest Mushroom Cap",
+        "changePct": 69427.58620689655,
+        "startPrice": 29,
+        "endPrice": 20163
       },
       {
         "itemId": 24186,
@@ -707,9 +707,9 @@
       {
         "itemId": 20898,
         "itemName": "Lookout's Shoes",
-        "changePct": 39422.6,
+        "changePct": 39589.5,
         "startPrice": 1000,
-        "endPrice": 395226
+        "endPrice": 396895
       }
     ]
   }
