@@ -1,6 +1,6 @@
 {
   "itemId": 21792,
-  "itemName": "Unknown Item",
+  "itemName": "Necklace of the Diamond Tower",
   "priceHistory": [
     {
       "date": "2026-02-26T21:27:27+00:00",
@@ -7097,11 +7097,27 @@
       "marketValue": 35000,
       "quantity": 0,
       "numAuctions": 0
+    },
+    {
+      "date": "2026-08-07T00:21:30+00:00",
+      "timestamp": 1786062090,
+      "minBuyout": 550000,
+      "marketValue": 550000,
+      "quantity": 5,
+      "numAuctions": 1
+    },
+    {
+      "date": "2026-08-07T03:25:10+00:00",
+      "timestamp": 1786073110,
+      "minBuyout": 550000,
+      "marketValue": 550000,
+      "quantity": 5,
+      "numAuctions": 1
     }
   ],
-  "dataPoints": 887,
+  "dataPoints": 889,
   "dateRange": {
     "start": "2026-02-26T21:27:27+00:00",
-    "end": "2026-05-01T11:54:39+00:00"
+    "end": "2026-08-07T03:25:10+00:00"
   }
 }
