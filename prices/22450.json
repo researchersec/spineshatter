@@ -24697,11 +24697,43 @@
       "marketValue": 106087,
       "quantity": 3073,
       "numAuctions": 124
+    },
+    {
+      "date": "2026-08-31T15:26:50+00:00",
+      "timestamp": 1788190010,
+      "minBuyout": 83550,
+      "marketValue": 104644,
+      "quantity": 3448,
+      "numAuctions": 87
+    },
+    {
+      "date": "2026-08-31T20:57:49+00:00",
+      "timestamp": 1788209869,
+      "minBuyout": 82545,
+      "marketValue": 103547,
+      "quantity": 2520,
+      "numAuctions": 52
+    },
+    {
+      "date": "2026-09-01T00:25:10+00:00",
+      "timestamp": 1788222310,
+      "minBuyout": 82519,
+      "marketValue": 103178,
+      "quantity": 2407,
+      "numAuctions": 46
+    },
+    {
+      "date": "2026-09-01T05:24:30+00:00",
+      "timestamp": 1788240270,
+      "minBuyout": 80069,
+      "marketValue": 102659,
+      "quantity": 2766,
+      "numAuctions": 59
     }
   ],
-  "dataPoints": 3087,
+  "dataPoints": 3091,
   "dateRange": {
     "start": "2026-02-06T15:06:11+00:00",
-    "end": "2026-08-31T07:39:10+00:00"
+    "end": "2026-09-01T05:24:30+00:00"
   }
 }
