@@ -30849,11 +30849,67 @@
       "marketValue": 12667,
       "quantity": 1006,
       "numAuctions": 18
+    },
+    {
+      "date": "2026-09-02T10:25:30+00:00",
+      "timestamp": 1788344730,
+      "minBuyout": 17542,
+      "marketValue": 12852,
+      "quantity": 1306,
+      "numAuctions": 22
+    },
+    {
+      "date": "2026-09-02T14:36:16+00:00",
+      "timestamp": 1788359776,
+      "minBuyout": 17516,
+      "marketValue": 12980,
+      "quantity": 1489,
+      "numAuctions": 29
+    },
+    {
+      "date": "2026-09-02T18:03:59+00:00",
+      "timestamp": 1788372239,
+      "minBuyout": 17512,
+      "marketValue": 13157,
+      "quantity": 1435,
+      "numAuctions": 29
+    },
+    {
+      "date": "2026-09-02T21:00:55+00:00",
+      "timestamp": 1788382855,
+      "minBuyout": 14807,
+      "marketValue": 13391,
+      "quantity": 1581,
+      "numAuctions": 33
+    },
+    {
+      "date": "2026-09-02T23:18:19+00:00",
+      "timestamp": 1788391099,
+      "minBuyout": 17311,
+      "marketValue": 13564,
+      "quantity": 1270,
+      "numAuctions": 21
+    },
+    {
+      "date": "2026-09-03T01:16:49+00:00",
+      "timestamp": 1788398209,
+      "minBuyout": 17311,
+      "marketValue": 13627,
+      "quantity": 1234,
+      "numAuctions": 19
+    },
+    {
+      "date": "2026-09-03T06:04:35+00:00",
+      "timestamp": 1788415475,
+      "minBuyout": 17304,
+      "marketValue": 13817,
+      "quantity": 1442,
+      "numAuctions": 24
     }
   ],
-  "dataPoints": 3856,
+  "dataPoints": 3863,
   "dateRange": {
     "start": "2026-01-01T01:23:56+00:00",
-    "end": "2026-09-02T05:49:04+00:00"
+    "end": "2026-09-03T06:04:35+00:00"
   }
 }
