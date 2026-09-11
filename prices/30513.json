@@ -1,6 +1,6 @@
 {
   "itemId": 30513,
-  "itemName": "Unknown Item",
+  "itemName": "Bloody Spider Fang",
   "priceHistory": [
     {
       "date": "2026-04-28T23:36:22+00:00",
@@ -1793,11 +1793,19 @@
       "marketValue": 2000,
       "quantity": 0,
       "numAuctions": 0
+    },
+    {
+      "date": "2026-09-11T06:28:43+00:00",
+      "timestamp": 1789108123,
+      "minBuyout": 10000,
+      "marketValue": 10000,
+      "quantity": 1,
+      "numAuctions": 1
     }
   ],
-  "dataPoints": 224,
+  "dataPoints": 225,
   "dateRange": {
     "start": "2026-04-28T23:36:22+00:00",
-    "end": "2026-05-15T21:18:21+00:00"
+    "end": "2026-09-11T06:28:43+00:00"
   }
 }
