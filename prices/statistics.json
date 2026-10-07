@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T08:39:13.640366+00:00",
+  "generatedAt": "2026-10-07T08:20:40.683628+00:00",
   "marketSummary": {
     "totalItems": 9439,
     "totalMarketValue": 11232167410,
@@ -579,9 +579,16 @@
       {
         "itemId": 3641,
         "itemName": "Journeyman's Bracers",
-        "changePct": 11706.818181818182,
+        "changePct": 12098.545454545454,
         "startPrice": 1100,
-        "endPrice": 129875
+        "endPrice": 134184
+      },
+      {
+        "itemId": 6517,
+        "itemName": "Pioneer Belt",
+        "changePct": 8680.129870129871,
+        "startPrice": 770,
+        "endPrice": 67607
       },
       {
         "itemId": 4776,
@@ -591,53 +598,46 @@
         "endPrice": 3999
       },
       {
-        "itemId": 6517,
-        "itemName": "Pioneer Belt",
-        "changePct": 7995.974025974026,
-        "startPrice": 770,
-        "endPrice": 62339
-      },
-      {
-        "itemId": 22613,
-        "itemName": "Craftsman's Writ - Goblin Sapper Charge",
-        "changePct": 6998.069935664522,
-        "startPrice": 29999,
-        "endPrice": 2129350
-      },
-      {
         "itemId": 3670,
         "itemName": "Large Slimy Bone",
-        "changePct": 6391.666666666666,
+        "changePct": 6364.285714285715,
         "startPrice": 84,
-        "endPrice": 5453
+        "endPrice": 5430
       },
       {
         "itemId": 20897,
         "itemName": "Lookout's Tunic",
-        "changePct": 5996.576204169662,
+        "changePct": 6014.081595974119,
         "startPrice": 77896,
-        "endPrice": 4748989
+        "endPrice": 4762625
+      },
+      {
+        "itemId": 22613,
+        "itemName": "Craftsman's Writ - Goblin Sapper Charge",
+        "changePct": 5153.575119170639,
+        "startPrice": 29999,
+        "endPrice": 1576020
       },
       {
         "itemId": 3469,
         "itemName": "Copper Chain Boots",
-        "changePct": 5053.113553113553,
+        "changePct": 4454.971219256934,
         "startPrice": 3822,
-        "endPrice": 196952
+        "endPrice": 174091
       },
       {
         "itemId": 3167,
         "itemName": "Thick Spider Hair",
-        "changePct": 3250.0,
+        "changePct": 3020.0,
         "startPrice": 10,
-        "endPrice": 335
+        "endPrice": 312
       },
       {
-        "itemId": 20900,
-        "itemName": "Warder's Boots",
-        "changePct": 2119.1400000000003,
-        "startPrice": 10000,
-        "endPrice": 221914
+        "itemId": 15629,
+        "itemName": "Formidable Bracers",
+        "changePct": 2161.698743438842,
+        "startPrice": 18861,
+        "endPrice": 426579
       }
     ],
     "thirtyDay": [
@@ -649,13 +649,6 @@
         "endPrice": 50000000
       },
       {
-        "itemId": 15302,
-        "itemName": "Grizzly Belt",
-        "changePct": 156820.83712465878,
-        "startPrice": 1099,
-        "endPrice": 1724560
-      },
-      {
         "itemId": 731,
         "itemName": "Goretusk Snout",
         "changePct": 114055.25114155251,
@@ -663,18 +656,39 @@
         "endPrice": 250000
       },
       {
+        "itemId": 15302,
+        "itemName": "Grizzly Belt",
+        "changePct": 111825.47770700637,
+        "startPrice": 1099,
+        "endPrice": 1230061
+      },
+      {
         "itemId": 2400,
         "itemName": "Light Chain Leggings",
-        "changePct": 52490.22988505747,
+        "changePct": 51837.93103448275,
         "startPrice": 174,
-        "endPrice": 91507
+        "endPrice": 90372
       },
       {
         "itemId": 6363,
         "itemName": "26 Pound Catfish",
-        "changePct": 42632.252454991816,
+        "changePct": 42927.29132569558,
         "startPrice": 9776,
-        "endPrice": 4177505
+        "endPrice": 4206348
+      },
+      {
+        "itemId": 1395,
+        "itemName": "Apprentice's Pants",
+        "changePct": 38374.122,
+        "startPrice": 100000,
+        "endPrice": 38474122
+      },
+      {
+        "itemId": 3167,
+        "itemName": "Thick Spider Hair",
+        "changePct": 34430.0,
+        "startPrice": 10,
+        "endPrice": 3453
       },
       {
         "itemId": 9334,
@@ -684,32 +698,18 @@
         "endPrice": 1835060
       },
       {
-        "itemId": 3167,
-        "itemName": "Thick Spider Hair",
-        "changePct": 31789.999999999996,
-        "startPrice": 10,
-        "endPrice": 3189
-      },
-      {
         "itemId": 5118,
         "itemName": "Large Flat Tooth",
-        "changePct": 26957.575757575756,
+        "changePct": 29820.20202020202,
         "startPrice": 99,
-        "endPrice": 26787
+        "endPrice": 29621
       },
       {
         "itemId": 20982,
         "itemName": "Sharp Dagger",
-        "changePct": 14307.698029007064,
+        "changePct": 14540.089252510228,
         "startPrice": 2689,
-        "endPrice": 387423
-      },
-      {
-        "itemId": 20897,
-        "itemName": "Lookout's Tunic",
-        "changePct": 12637.696415733799,
-        "startPrice": 77896,
-        "endPrice": 9922156
+        "endPrice": 393672
       }
     ]
   }
